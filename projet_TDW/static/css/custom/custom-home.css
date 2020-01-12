@@ -65,3 +65,12 @@
 #myBtn3_more {
   display: none;
 }
+
+.inputfile {
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
+}
