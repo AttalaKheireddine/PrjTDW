@@ -59,3 +59,9 @@
   color: black;
   opacity: 0.7;
 }
+
+#myBtn1_more,
+#myBtn2_more,
+#myBtn3_more {
+  display: none;
+}
