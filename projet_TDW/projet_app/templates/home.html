@@ -1,7 +1,7 @@
 {% extends "base.html" %} {% block content %} {% load static %}
 
 <section class="container-fluid row m-5">
-  <section class="col-6" id="leftPart">
+  <section class="col-5" id="leftPart">
     <p>
 
       <h3 class="font-weight-bold">Une application fiable et sûre</h3>
@@ -37,12 +37,32 @@
       ><span id="myBtn3_more"
         >la vie des individus en satisfaisant un de leurs besoins quotidiens. Ainsi, ce pas dans l'aire du digital 
         est une de nos plus grandes fiertés</span
-      ><a onclick="myFunction()" class="text-primary" id="myBtn3">
+      ><a  class="text-primary" id="myBtn3">
         Afficher plus
       </a>
     </p>
   </section>
-  <section class="col-6"></section>
+  <section class="col-6 ml-5">
+    <div id="register_login">
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+      <li class="nav-item">
+        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#login" role="tab" aria-controls="login" aria-selected="true">Se connecter</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#register" role="tab" aria-controls="register" aria-selected="false">S'inscrire</a>
+      </li>
+     
+    </ul>
+  </div>
+    <div class="tab-content" id="myTabContent">
+      <div class="tab-pane fade show active" id="login" role="tabpanel" aria-labelledby="login-tab">login</div>
+      <div class="tab-pane fade" id="register" role="tabpanel" aria-labelledby="register-tab">register</div>
+      
+    </div>
+    <header class="bg-secondary p-4">
+      <h2 class="text-white h2 text-center">Demandez une traduction ici</h2>
+    </header>
+  </section>
 </section>
 <script src="{% static 'js/custom/home.js' %}"></script>
 
