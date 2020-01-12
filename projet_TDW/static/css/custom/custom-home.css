@@ -1,0 +1,61 @@
+.unstyled-list {
+  list-style-type: none;
+}
+
+/* Style all font awesome icons */
+.fa {
+  padding-top: 20px;
+  width: 15px;
+
+  text-align: center;
+  text-decoration: none;
+  border-radius: 60%;
+}
+
+.fa:hover {
+  opacity: 0.7;
+  text-decoration: none;
+  color: unset;
+}
+
+/* Facebook */
+.fa-facebook {
+  color: blue;
+  background: white;
+}
+
+.fa-facebook:hover {
+  opacity: 0.7;
+  color: blue;
+  background: white;
+}
+
+/* Twitter */
+.fa-twitter {
+  color: #55acee;
+}
+
+.fa-twitter:hover {
+  color: #55acee;
+  opacity: 0.7;
+}
+
+/*Linkedin*/
+.fa-linkedin {
+  color: black;
+}
+
+.fa-linkedin:hover {
+  color: black;
+  opacity: 0.7;
+}
+
+/*Wordpress*/
+.fa-wordpress {
+  color: black;
+}
+
+.fa-wordpress:hover {
+  color: black;
+  opacity: 0.7;
+}
