@@ -1,0 +1,26 @@
+<div class="row">
+  {% for translator in translators %}
+  <div class="card col-5 mx-3 my-4" style="width: 18rem;">
+    <div class="card-body">
+      <h5 class="card-title">{{translator.user_profile.full_name}}</h5>
+      {% if translator.is_assermented %}
+      <h6 class="card-subtitle mb-2 text-muted">Traducteur assermenté</h6>
+      {% endif %}
+      <p class="card-text">
+        {% if translator.not_globale %} Note globale :
+        {{translator.global_rate}} {% endif %}
+        <a href="#" target="_blank">Voir le profile</a>
+      </p>
+      <input
+        type="checkbox"
+        data-value="{{translator.user.slug}}"
+        class="form-check-input"
+        id="trans_check{{ forloop.counter0 }}"
+      />
+      <label class="form-check-label" for="trans_check{{ forloop.counter0 }}"
+        >Choisissez ce traducteur</label
+      >
+    </div>
+  </div>
+  {% endfor %}
+</div>
