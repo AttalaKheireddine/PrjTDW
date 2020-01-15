@@ -63,7 +63,7 @@
       {% endif %}
      
     </ul>
-  </div>
+    </div>
     <div class="tab-content" id="myTabContent">
       <div class="tab-pane fade" id="login" role="tabpanel" aria-labelledby="login-tab">
         <form class="m-4" id="login_form" method="POST" action="{% url 'projet_app:login' %}">
@@ -83,37 +83,17 @@
       </div>
       <div class="tab-pane fade" id="register" role="tabpanel" aria-labelledby="register-tab">
         <h5 class="text-center mt-3">Veuillez fournir vos informations personnlles (si vous êtes un traducteur, veuillez vous inscrire à travers <a href="#" class="text-primary">ce lien</a>)</h5>
-        <form class="m-4" id="register_form" method="POST">
+        <form class="m-4" id="register_form" method="POST" action="{% url 'projet_app:register' %}">
           {% csrf_token %}
-        <div class="form-row my-2">
-          <div class="col">
-            <input type="text" class="form-control" placeholder="Nom">
+          <div class="row">
+          {{form}}
           </div>
-          <div class="col">
-            <input type="text" class="form-control" placeholder="Prénom">
-          </div>
-        </div>
-        <div class="form-row my-3">
-          <div class="col">
-            <input type="email" class="form-control" placeholder="Email">
-          </div>
-          <div class="col">
-            <input type="password" class="form-control" placeholder="Mot de passe">
-          </div>
-        </div>
-        <div class="form-row my-3">
-          <div class="col">
-            <input type="text" class="form-control" placeholder="Numéro de téléphone">
-          </div>
-          <div class="col">
-            <input type="text" class="form-control" placeholder="Adresse">
-          </div>
-        </div>
-        <div class="form-row my-3 ">
           <button type="submit" class="btn btn-success col font-weight-bold mx-2 py-2">S'inscrire</button>
-        </div>
         
-      </form>
+        </form>
+      </div>
+        
+     
       <hr>
     </div>
       
@@ -163,23 +143,23 @@
       <hr>
       <!--Here WE gonna handle langage and category aspects of the form-->
       <div class="row">
-      <div class="col">
-        <h6> Choisissez la langue source </h6>
-      <select class="custom-select" id="src_language_select">
-        {% for language in languages %}
-        <option>{{language.name}}</option>
-        {% endfor %}
-      </select>
-      </div>
+        <div class="col">
+          <h6> Choisissez la langue source </h6>
+          <select class="custom-select" id="src_language_select">
+          {% for language in languages %}
+            <option>{{language.name}}</option>
+         {% endfor %}
+          </select>
+        </div>
       
 
-      <div class="col">
+        <div class="col">
         <h6> Choisissez la langue destination </h6>
-      <select class="custom-select" id="dest_language_select">
+        <select class="custom-select" id="dest_language_select">
         {% for language in languages %}
-        <option>{{language.name}}</option>
+          <option>{{language.name}}</option>
         {% endfor %}
-      </select>
+        </select>
       </div>
       
     </div>
@@ -195,7 +175,7 @@
         <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
       </div>
       
-     <h6 class="text-center my-2">Enfin, veuillez donner le fichier à traduire (en format pdf)</h6>
+      <h6 class="text-center my-2">Enfin, veuillez donner le fichier à traduire (en format pdf)</h6>
       
       <div class="row">
         <div class="col"></div>
