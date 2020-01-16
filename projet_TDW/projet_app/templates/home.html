@@ -103,7 +103,7 @@
     </header>
     <div>
       
-      <form class="m-4 md-form" id="tr" method="POST" enctype="multipart/form-data">
+      <form class="m-4 md-form" id="tr" method="POST" enctype="multipart/form-data" action="{% url 'projet_app:send_request' %}">
         {% csrf_token %}
         {% if err_msg %}
         <div>
@@ -116,28 +116,36 @@
           <hr>
         </div>
         {% endif %}
+        {% if messages %}
+        {% for message in messages %}
+            <p
+            {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %} class="text-center text-danger" {% endif %}
+            {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %} class="text-center text-success" {% endif %}
+            >{{ message }}</p>
+        {% endfor %}  
+        {% endif %}
         <h6 class="text-center mt-3">informations du client</h6>
       <div class="form-row my-2">
         <div class="col">
-          <input type="text" class="form-control" placeholder="Nom">
+          <input type="text" class="form-control" placeholder="Nom" name="family_name">
         </div>
         <div class="col">
-          <input type="text" class="form-control" placeholder="Prénom">
+          <input type="text" class="form-control" placeholder="Prénom" name="first_name">
         </div>
       </div>
       <div class="form-row my-3">
         <div class="col">
-          <input type="email" class="form-control" placeholder="Email">
+          <input type="email" class="form-control" placeholder="Email" name="email">
         </div>
         <div class="col">
-          <input type="text" class="form-control" placeholder="Numéro de téléphone">
+          <input type="text" class="form-control" placeholder="Numéro de téléphone" name="phone">
         </div>
       </div>
       
       <div class="form-row my-3">
         
         <div class="col">
-          <input type="text" class="form-control" placeholder="Adresse">
+          <input type="text" class="form-control" placeholder="Adresse" name="address">
         </div>
       </div>
       <hr>
@@ -145,7 +153,7 @@
       <div class="row">
         <div class="col">
           <h6> Choisissez la langue source </h6>
-          <select class="custom-select" id="src_language_select">
+          <select class="custom-select" id="src_language_select" name="src_lang">
           {% for language in languages %}
             <option>{{language.name}}</option>
          {% endfor %}
@@ -155,7 +163,7 @@
 
         <div class="col">
         <h6> Choisissez la langue destination </h6>
-        <select class="custom-select" id="dest_language_select">
+        <select class="custom-select" id="dest_language_select" name="dest_lang">
         {% for language in languages %}
           <option>{{language.name}}</option>
         {% endfor %}
@@ -164,7 +172,7 @@
       
     </div>
     <h6 class="my-2 text-center">Quelle catégorie de traduction désirez-vous?</h6>
-      <select class="custom-select" id="category_select">
+      <select class="custom-select" id="category_select" name="category">
         {% for category  in categories %}
         <option>{{category.name}}</option>
         {% endfor %}
@@ -172,14 +180,14 @@
       <hr>
       <h6 class="text-center">Si vous avez des commentaires concernant votre traduction, renseignez-les ici</h6>
       <div class="form-group">
-        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="notes"></textarea>
       </div>
       
       <h6 class="text-center my-2">Enfin, veuillez donner le fichier à traduire (en format pdf)</h6>
       
       <div class="row">
         <div class="col"></div>
-        <input type="file" name="" id="file" class="inputfile">
+        <input type="file" name="file_req" id="file" class="inputfile">
         <label for="file" class="btn btn-primary my-2 text-center align-center col-10">Choisir un fichier à envoyer</label>
         <div class="col"></div>     
       </div>
@@ -192,7 +200,7 @@
         <button class="btn btn-success col font-weight-bold mx-2" id="find_translator">Trouver un traducteur !</button>
       </div>
       <div id="ajax_response"></div>
-      <input type="submit" value="Envoyer requetes" id="submit_3" class="btn btn-success col font-weight-bold mx-2 text-center p-3" style="visibility:hidden;" />
+     
     </form>
     </div>
   </section>
@@ -200,4 +208,5 @@
 <script src="{% static 'js/custom/home.js' %}"></script>
 <script src="{% static 'js/custom/home-forms.js' %}"></script>
 <script src="{% static 'js/custom/custom-file-input.js' %}"></script>
+
 {% endblock %}

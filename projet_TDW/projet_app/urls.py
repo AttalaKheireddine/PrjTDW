@@ -10,7 +10,7 @@ urlpatterns = [
     url(r"^logout",views.Logout.as_view(),name="logout"),
     url(r"^login",views.Login.as_view(),name="login"),
     url(r"^register",views.Register.as_view(),name="register"),
-
+    url(r"^send-request",views.SendRequest.as_view(),name="send_request"),
 
     #those are for our pages
     url(r'my-profile$',views.HomeView.as_view(),name="my profile"),

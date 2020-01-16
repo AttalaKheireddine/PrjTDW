@@ -1,6 +1,11 @@
 $("document").ready(function() {
   $("#find_translator").click(function(e) {
     e.preventDefault();
+    console.log(
+      $("#src_language_select")
+        .children("option:selected")
+        .val()
+    );
     $.ajax({
       type: "GET",
       url: "/select-translators",
@@ -14,14 +19,21 @@ $("document").ready(function() {
         category: $("#category_select")
           .children("option:selected")
           .val(),
-        sworn_in: $("#trans_check").val()
+        sworn_in: $("#trans_check").is(":checked") ? "true" : "false"
       },
       success: function(response, textStatus, jqXHR) {
         $("#ajax_response").html(response);
         $("#submit_3").css("visibility", "visible");
-        $("#submit_3").html(
-          "Il semble que ne vous êtes pas connectés. Veuillez vous connecter ou vous inscrire pour pouvoir bénéficier d'une traduction"
-        );
+        $(".translatorCheckbox").click(function() {
+          let objs = $(".translatorCheckbox");
+          let res = "";
+          for (i = 0; i < objs.length; i++) {
+            if ($("#" + objs[i].id).is(":checked"))
+              res = res + $("#" + objs[i].id).attr("value") + " ";
+          }
+
+          $('input[name="translators"]').attr("value", res);
+        });
       }
     });
   });

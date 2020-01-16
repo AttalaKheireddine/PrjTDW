@@ -35,6 +35,11 @@ def reference_file_naming(instance, filename):
     format_ =str(uuid.uuid4()) + ".pdf"
     return os.path.join(path, format_)
 
+def assermented_file_naming(instance, filename):
+    path = "asermented-files"
+    format_ =str(uuid.uuid4()) + ".pdf"
+    return os.path.join(path, format_)
+
 
 def profile_pic_naming(instance, filename):
     path = "profile-pic"
@@ -94,8 +99,8 @@ class TranslatorProfile (models.Model):
     categories = models.ManyToManyField(TranslationCategory,related_name="translator")
     cv = models.FileField(upload_to=cv_file_naming)
     is_assermented = models.BooleanField(default=False)
-    assermented_file = models.FileField(upload_to=request_file_naming, blank=True)
-    user_profile = models.OneToOneField(UserProfile, on_delete=models.CASCADE, related_name="translator")
+    assermented_file = models.FileField(upload_to=assermented_file_naming, blank=True)
+    user_profile = models.OneToOneField(UserProfile, on_delete=models.CASCADE, related_name="translator_profile")
     global_rate = models.IntegerField(blank=True,null=True)
 
     def __str__(self):
@@ -104,7 +109,7 @@ class TranslatorProfile (models.Model):
 
 class ReferenceFile(models.Model):
     translator = models.ForeignKey(TranslatorProfile, on_delete=models.CASCADE)
-    file = models.FileField(upload_to="""put sth here father mocker""")
+    file = models.FileField(upload_to=reference_file_naming)
 
 
 class Rate(models.Model):
@@ -120,13 +125,18 @@ class Warn (models.Model):
 
 
 class TranslationRequest (models.Model):
+    requester = models.ForeignKey(UserProfile,on_delete=models.CASCADE)
     full_name = models.CharField(max_length=60, blank=False, null=False)
     address = models.CharField(max_length=100, blank=True, null=False)
     phone_number = models.CharField(max_length=15)
     email = models.EmailField()
-    translators = models.ManyToManyField(TranslatorProfile)
+    translator = models.ForeignKey(TranslatorProfile,on_delete=models.CASCADE,blank=True)
     treated = models.BooleanField(default=False)
     notes = models.TextField(blank=True)
+    file = models.FileField(upload_to=request_file_naming)
+    src_language = models.ForeignKey(Language, on_delete=models.CASCADE,related_name="src_requests")
+    dest_language = models.ForeignKey(Language, on_delete=models.CASCADE,related_name="dest_requests")
+    category = models.ForeignKey(TranslationCategory, on_delete=models.CASCADE)
 
 
 class TranslationOffer (models.Model):

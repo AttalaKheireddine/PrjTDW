@@ -13,14 +13,31 @@
       </p>
       <input
         type="checkbox"
-        data-value="{{translator.user.slug}}"
-        class="form-check-input"
+        class="form-check-input translatorCheckbox"
         id="trans_check{{ forloop.counter0 }}"
+        data="{{translator.user_profile.slug}}"
+        value="{{translator.user_profile.slug}}"
       />
       <label class="form-check-label" for="trans_check{{ forloop.counter0 }}"
         >Choisissez ce traducteur</label
       >
     </div>
   </div>
-  {% endfor %}
+  {% empty %}
+  <p class="m-2 text-center">
+    Aucun de nos traducteurs ne répond à vos critères, veuillez nous excuser
+  </p>
+  {% endfor %} {% if translators %}
+  <div class="col-12"></div>
+  <div class="col"></div>
+  <input type="text" name="translators" type="hidden" style="display: none;" />
+  <input
+    type="submit"
+    value="Envoyer requetes"
+    id="submit_3"
+    class="btn btn-success col-10 font-weight-bold mx-2 text-center p-3"
+    style="visibility:hidden;"
+  />
+  <div class="col"></div>
+  {% endif %}
 </div>
