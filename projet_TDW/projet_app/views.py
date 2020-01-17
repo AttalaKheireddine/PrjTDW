@@ -150,6 +150,7 @@ class RecruitTranslator(View):
 
     def post(self,request):
         new_form = AddTranslatorForm(request.POST,request.FILES)
+
         if new_form.is_valid():
             user = User()
             user.username = new_form.cleaned_data['email']

@@ -26,6 +26,12 @@ class AddUserForm(forms.Form):
     commune = forms.CharField(label='', max_length=15, widget=forms.TextInput(
         attrs={'placeholder': 'Commune', 'class': 'col-5 m-2 form-control'}))
 
+    def __init__(self, *args, **kwargs):
+        super(AddUserForm, self).__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.error_messages = {'required': 'Ce champ est requis'.format(
+                fieldname=field.label)}
+
 class AddTranslatorForm(AddUserForm):
     languages = forms.MultipleChoiceField(choices=Language.objects.all().values_list("id", "name"), widget=forms.CheckboxSelectMultiple,required=True)
     categories = forms.MultipleChoiceField(choices=TranslationCategory.objects.all().values_list("id", "name"), widget=forms.CheckboxSelectMultiple,required=True)
@@ -34,3 +40,9 @@ class AddTranslatorForm(AddUserForm):
     ref1 = forms.FileField(required=True, label="Choisir un fichier à envoyer (Ce champs est requis)",validators=[file_name_pdf_validator])
     ref2 = forms.FileField(label="Choisir un fichier à envoyer", required=False,validators=[file_name_pdf_validator])
     ref3 = forms.FileField(label="Choisir un fichier à envoyer", required=False,validators=[file_name_pdf_validator])
+
+    def __init__(self, *args, **kwargs):
+        super(AddTranslatorForm, self).__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.error_messages = {'required': 'Ce champ est requis'.format(
+                fieldname=field.label)}

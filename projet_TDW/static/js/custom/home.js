@@ -1,11 +1,11 @@
-$("document").ready(function() {
-  $("#myBtn1").click(function() {
+$("document").ready(function () {
+  $("#myBtn1").click(function () {
     more_less("myBtn1");
   });
-  $("#myBtn2").click(function() {
+  $("#myBtn2").click(function () {
     more_less("myBtn2");
   });
-  $("#myBtn3").click(function() {
+  $("#myBtn3").click(function () {
     more_less("myBtn3");
   });
 });

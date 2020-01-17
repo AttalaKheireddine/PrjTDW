@@ -1,68 +1,61 @@
-{% extends "base.html" %} 
+{% extends "base.html" %}
 {% block title %} Translate {% endblock %}
 {% block content %} {% load static %}
 {% if not user.is_authenticated %}
 <script src="{% static 'js/custom/non_auth.js' %}"></script>
 {% endif %}
-
+<script></script>
 <section class="container-fluid row m-5">
   <section class="col-5" id="leftPart">
     <p>
 
       <h3 class="font-weight-bold">Une application fiable et sûre</h3>
-      Translate vous offre la possibilité de jouir de traductions de hauts niveaux <a
-        id="myBtn1_dots"
-        >...</a
-      ><span id="myBtn1_more"
-        >faîtes par des gens de confiance! en effet, grâce à notre dispositif de gestion des traducteurs,
-         vous pourrez avoir une idée précise sur l'expérience mais surtout l'expertise de la personne avec qui vous 
-         Travaillez</span
-      ><a onclick="myFunction()" class="text-primary" id="myBtn1">
+      Translate vous offre la possibilité de jouir de traductions de hauts niveaux <a id="myBtn1_dots">...</a><span
+        id="myBtn1_more">faîtes par des gens de confiance! en effet, grâce à notre dispositif de gestion des
+        traducteurs,
+        vous pourrez avoir une idée précise sur l'expérience mais surtout l'expertise de la personne avec qui vous
+        Travaillez</span><a onclick="myFunction()" class="text-primary" id="myBtn1">
         Afficher plus
       </a>
     </p>
     <hr>
     <p>
       <h3 class="font-weight-bold">Une application facile à utiliser</h3>
-      Translate offre toute ces fonctionnalités dans une interface Web intuitive  <a
-        id="myBtn2_dots"
-        >...</a
-      ><span id="myBtn2_more"
-        >permettant a tout type de public d'obtenir des traductions sans aide particulière. Pour nous, le satisfaction du client passe avant tout!</span
-      ><a onclick="myFunction()" class="text-primary" id="myBtn2">
+      Translate offre toute ces fonctionnalités dans une interface Web intuitive <a id="myBtn2_dots">...</a><span
+        id="myBtn2_more">permettant a tout type de public d'obtenir des traductions sans aide particulière. Pour nous,
+        le satisfaction du client passe avant tout!</span><a onclick="myFunction()" class="text-primary" id="myBtn2">
         Afficher plus
       </a>
     </p>
     <hr>
     <p>
       <h3 class="font-weight-bold">Une solution moderne</h3>
-      Translate se veut être un moyen d'utiliser la technologie pour faciliter  <a
-        id="myBtn3_dots"
-        >...</a
-      ><span id="myBtn3_more"
-        >la vie des individus en satisfaisant un de leurs besoins quotidiens. Ainsi, ce pas dans l'aire du digital 
-        est une de nos plus grandes fiertés</span
-      ><a  class="text-primary" id="myBtn3">
+      Translate se veut être un moyen d'utiliser la technologie pour faciliter <a id="myBtn3_dots">...</a><span
+        id="myBtn3_more">la vie des individus en satisfaisant un de leurs besoins quotidiens. Ainsi, ce pas dans l'aire
+        du digital
+        est une de nos plus grandes fiertés</span><a class="text-primary" id="myBtn3">
         Afficher plus
       </a>
     </p>
   </section>
   <section class="col-6 ml-5">
     <div id="register_login">
-    <ul class="nav nav-tabs" id="myTab" role="tablist">
-      <li class="nav-item">
-        <a class="nav-link " id="home-tab" data-toggle="tab" href="#login" role="tab" aria-controls="login" aria-selected="true">Se connecter</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#register" role="tab" aria-controls="register" aria-selected="false">S'inscrire</a>
-      </li>
-      {% if user.is_authenticated %}
-      <li class="nav-item">
-        <a href="{% url 'projet_app:logout' %}" class="btn btn-primary">Se déconnecter</a>
-      </li>
-      {% endif %}
-     
-    </ul>
+      <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item">
+          <a class="nav-link " id="home-tab" data-toggle="tab" href="#login" role="tab" aria-controls="login"
+            aria-selected="true">Se connecter</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="profile-tab" data-toggle="tab" href="#register" role="tab" aria-controls="register"
+            aria-selected="false">S'inscrire</a>
+        </li>
+        {% if user.is_authenticated %}
+        <li class="nav-item">
+          <a href="{% url 'projet_app:logout' %}" class="btn btn-primary">Se déconnecter</a>
+        </li>
+        {% endif %}
+
+      </ul>
     </div>
     <div class="tab-content" id="myTabContent">
       <div class="tab-pane fade" id="login" role="tabpanel" aria-labelledby="login-tab">
@@ -70,138 +63,144 @@
           {% csrf_token %}
           <div class="form-group">
             <label for="exampleInputEmail1">Email</label>
-            <input type="text" class="form-control" id="exampleInputEmail1" name="username"  placeholder="Entrez votre nom">
+            <input type="text" class="form-control" id="exampleInputEmail1" name="username"
+              placeholder="Entrez votre nom">
           </div>
           <div class="form-group">
             <label for="exampleInputPassword1">Mot de passe</label>
-            <input type="password" class="form-control" id="exampleInputPassword1" name="password" placeholder="votre mot de passe svp">
+            <input type="password" class="form-control" id="exampleInputPassword1" name="password"
+              placeholder="votre mot de passe svp">
           </div>
-          
+
           <button type="submit" class="btn btn-primary font-weight-bold px-4">Se Connecter</button>
           <hr>
         </form>
       </div>
       <div class="tab-pane fade" id="register" role="tabpanel" aria-labelledby="register-tab">
-        <h5 class="text-center mt-3">Veuillez fournir vos informations personnlles (si vous êtes un traducteur, veuillez vous inscrire à travers <a href="{% url 'projet_app:recruit' %}" class="text-primary">ce lien</a>)</h5>
+        <h5 class="text-center mt-3">Veuillez fournir vos informations personnlles (si vous êtes un traducteur, veuillez
+          vous inscrire à travers <a href="{% url 'projet_app:recruit' %}" class="text-primary">ce lien</a>)</h5>
         <form class="m-4" id="register_form" method="POST" action="{% url 'projet_app:register' %}">
           {% csrf_token %}
           <div class="row">
-          {{form}}
+            {{form}}
           </div>
           <button type="submit" class="btn btn-success col font-weight-bold mx-2 py-2">S'inscrire</button>
-        
+
         </form>
       </div>
-        
-     
+
+
       <hr>
     </div>
-      
+
     </div>
     <header class="bg-secondary p-4">
       <h2 class="text-white h2 text-center">Demandez une traduction ici</h2>
     </header>
     <div>
-      
-      <form class="m-4 md-form" id="tr" method="POST" enctype="multipart/form-data" action="{% url 'projet_app:send_request' %}">
+
+      <form class="m-4 md-form" id="tr" method="POST" enctype="multipart/form-data"
+        action="{% url 'projet_app:send_request' %}">
         {% csrf_token %}
         {% if err_msg %}
         <div>
-          <p class="text-danger text-center" id="error" >{{err_msg}}</p>
+          <p class="text-danger text-center" id="error">{{err_msg}}</p>
           <hr>
-        </div>  
+        </div>
         {% else %}
-        <div  >
+        <div>
           <p class="text-danger text-center" id="error" style="display: none;"></p>
           <hr>
         </div>
         {% endif %}
         {% if messages %}
         {% for message in messages %}
-            <p
-            {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %} class="text-center text-danger" {% endif %}
-            {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %} class="text-center text-success" {% endif %}
-            >{{ message }}</p>
-        {% endfor %}  
+        <p {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %} class="text-center text-danger" {% endif %}
+          {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %} class="text-center text-success" {% endif %}>
+          {{ message }}</p>
+        {% endfor %}
         {% endif %}
         <h6 class="text-center mt-3">informations du client</h6>
-      <div class="form-row my-2">
-        <div class="col">
-          <input type="text" class="form-control" placeholder="Nom" name="family_name">
+        <div class="form-row my-2">
+          <div class="col">
+            <input type="text" class="form-control" placeholder="Nom" name="family_name">
+          </div>
+          <div class="col">
+            <input type="text" class="form-control" placeholder="Prénom" name="first_name">
+          </div>
         </div>
-        <div class="col">
-          <input type="text" class="form-control" placeholder="Prénom" name="first_name">
+        <div class="form-row my-3">
+          <div class="col">
+            <input type="email" class="form-control" placeholder="Email" name="email">
+          </div>
+          <div class="col">
+            <input type="text" class="form-control" placeholder="Numéro de téléphone" name="phone">
+          </div>
         </div>
-      </div>
-      <div class="form-row my-3">
-        <div class="col">
-          <input type="email" class="form-control" placeholder="Email" name="email">
-        </div>
-        <div class="col">
-          <input type="text" class="form-control" placeholder="Numéro de téléphone" name="phone">
-        </div>
-      </div>
-      
-      <div class="form-row my-3">
-        
-        <div class="col">
-          <input type="text" class="form-control" placeholder="Adresse" name="address">
-        </div>
-      </div>
-      <hr>
-      <!--Here WE gonna handle langage and category aspects of the form-->
-      <div class="row">
-        <div class="col">
-          <h6> Choisissez la langue source </h6>
-          <select class="custom-select" id="src_language_select" name="src_lang">
-          {% for language in languages %}
-            <option>{{language.name}}</option>
-         {% endfor %}
-          </select>
-        </div>
-      
 
-        <div class="col">
-        <h6> Choisissez la langue destination </h6>
-        <select class="custom-select" id="dest_language_select" name="dest_lang">
-        {% for language in languages %}
-          <option>{{language.name}}</option>
-        {% endfor %}
+        <div class="form-row my-3">
+
+          <div class="col">
+            <input type="text" class="form-control" placeholder="Adresse" name="address">
+          </div>
+        </div>
+        <hr>
+        <!--Here WE gonna handle langage and category aspects of the form-->
+        <div class="row">
+          <div class="col">
+            <h6> Choisissez la langue source </h6>
+            <select class="custom-select" id="src_language_select" name="src_lang">
+              {% for language in languages %}
+              <option>{{language.name}}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+
+          <div class="col">
+            <h6> Choisissez la langue destination </h6>
+            <select class="custom-select" id="dest_language_select" name="dest_lang">
+              {% for language in languages %}
+              <option>{{language.name}}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+        </div>
+        <h6 class="my-2 text-center">Quelle catégorie de traduction désirez-vous?</h6>
+        <select class="custom-select" id="category_select" name="category">
+          {% for category  in categories %}
+          <option>{{category.name}}</option>
+          {% endfor %}
         </select>
-      </div>
-      
-    </div>
-    <h6 class="my-2 text-center">Quelle catégorie de traduction désirez-vous?</h6>
-      <select class="custom-select" id="category_select" name="category">
-        {% for category  in categories %}
-        <option>{{category.name}}</option>
-        {% endfor %}
-      </select>
-      <hr>
-      <h6 class="text-center">Si vous avez des commentaires concernant votre traduction, renseignez-les ici</h6>
-      <div class="form-group">
-        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="notes"></textarea>
-      </div>
-      
-      <h6 class="text-center my-2">Enfin, veuillez donner le fichier à traduire (en format pdf)</h6>
-      
-      <div class="row">
-        <div class="col"></div>
-        <input type="file" name="file_req" id="file" class="inputfile">
-        <label for="file" class="btn btn-primary my-2 text-center align-center col-10">Choisir un fichier à envoyer</label>
-        <div class="col"></div>     
-      </div>
-      <div class="form-check text-center mb-2">
-        <input type="checkbox" class="form-check-input" id="trans_check">
-        <label class="form-check-label" for="trans_check">Cochez cette case si vous acevez besoin d'un traducteur assermenté</label>
-      </div>
-    
-      <div class="row">
-        <button class="btn btn-success col font-weight-bold mx-2" id="find_translator">Trouver un traducteur !</button>
-      </div>
-      <div id="ajax_response"></div>
-     
-    </form>
+        <hr>
+        <h6 class="text-center">Si vous avez des commentaires concernant votre traduction, renseignez-les ici</h6>
+        <div class="form-group">
+          <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="notes"></textarea>
+        </div>
+
+        <h6 class="text-center my-2">Enfin, veuillez donner le fichier à traduire (en format pdf)</h6>
+
+        <div class="row">
+          <div class="col"></div>
+          <input type="file" name="file_req" id="file" class="inputfile">
+          <label for="file" class="btn btn-primary my-2 text-center align-center col-10">Choisir un fichier à
+            envoyer</label>
+          <div class="col"></div>
+        </div>
+        <div class="form-check text-center mb-2">
+          <input type="checkbox" class="form-check-input" id="trans_check">
+          <label class="form-check-label" for="trans_check">Cochez cette case si vous acevez besoin d'un traducteur
+            assermenté</label>
+        </div>
+
+        <div class="row">
+          <button class="btn btn-success col font-weight-bold mx-2" id="find_translator">Trouver un traducteur
+            !</button>
+        </div>
+        <div id="ajax_response"></div>
+
+      </form>
     </div>
   </section>
 </section>
