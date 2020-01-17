@@ -1,16 +1,16 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.db.models.signals import pre_save,post_save
+from django.db.models.signals import pre_save, post_save
 from random import randrange
 from django.template.defaultfilters import slugify
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.conf.global_settings import MEDIA_ROOT
-import os,uuid
+from django.utils import timezone
+import os
+import uuid
 
 # Create your models here.
-
 # helper functions for handling media file names
-
 
 def response_file_naming(instance, filename):
     path = "translation-responses"
@@ -32,12 +32,13 @@ def cv_file_naming(instance, filename):
 
 def reference_file_naming(instance, filename):
     path = "ref-files"
-    format_ =str(uuid.uuid4()) + ".pdf"
+    format_ = str(uuid.uuid4()) + ".pdf"
     return os.path.join(path, format_)
+
 
 def assermented_file_naming(instance, filename):
     path = "asermented-files"
-    format_ =str(uuid.uuid4()) + ".pdf"
+    format_ = str(uuid.uuid4()) + ".pdf"
     return os.path.join(path, format_)
 
 
@@ -55,7 +56,7 @@ class UserProfile(models.Model):
     address = models.CharField(max_length=100, blank=True, null=False)
     phone_number = models.CharField(max_length=15)
     slug = models.SlugField(unique=True, blank=True)
-    user = models.OneToOneField(User, on_delete=models.CASCADE,related_name="profile")
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
     profile_picture = models.ImageField(upload_to=profile_pic_naming, blank=True)
     wilaya = models.CharField(max_length=30)
     commune = models.CharField(max_length=50)
@@ -66,13 +67,11 @@ class UserProfile(models.Model):
 
 def create_slug(instance, new_slug=None):
     slug = new_slug if new_slug is not None else slugify(instance.full_name)
-    exists=UserProfile.objects.filter(slug=slug).exists()
+    exists = UserProfile.objects.filter(slug=slug).exists()
     if exists:
         new_slug = "{}-{}".format(slug, str(randrange(1, 100)))
         return create_slug(instance, new_slug)
     return slug
-
-
 
 
 class Language(models.Model):
@@ -80,7 +79,6 @@ class Language(models.Model):
 
     def __str__(self):
         return self.name
-
 
 
 class TranslationCategory(models.Model):
@@ -93,15 +91,16 @@ class TranslationCategory(models.Model):
     class Meta:
         verbose_name_plural = "Categories"
 
+
 class TranslatorProfile (models.Model):
     number_of_translations = models.IntegerField(default=0)
-    languages = models.ManyToManyField(Language,related_name="translator")
-    categories = models.ManyToManyField(TranslationCategory,related_name="translator")
+    languages = models.ManyToManyField(Language, related_name="translator")
+    categories = models.ManyToManyField(TranslationCategory, related_name="translator")
     cv = models.FileField(upload_to=cv_file_naming)
     is_assermented = models.BooleanField(default=False)
     assermented_file = models.FileField(upload_to=assermented_file_naming, blank=True)
     user_profile = models.OneToOneField(UserProfile, on_delete=models.CASCADE, related_name="translator_profile")
-    global_rate = models.IntegerField(blank=True,null=True)
+    global_rate = models.IntegerField(blank=True, null=True)
 
     def __str__(self):
         return self.user_profile.slug
@@ -125,18 +124,19 @@ class Warn (models.Model):
 
 
 class TranslationRequest (models.Model):
-    requester = models.ForeignKey(UserProfile,on_delete=models.CASCADE)
+    requester = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     full_name = models.CharField(max_length=60, blank=False, null=False)
     address = models.CharField(max_length=100, blank=True, null=False)
     phone_number = models.CharField(max_length=15)
     email = models.EmailField()
-    translator = models.ForeignKey(TranslatorProfile,on_delete=models.CASCADE,blank=True)
+    translator = models.ForeignKey(TranslatorProfile, on_delete=models.CASCADE, blank=True)
     treated = models.BooleanField(default=False)
     notes = models.TextField(blank=True)
     file = models.FileField(upload_to=request_file_naming)
-    src_language = models.ForeignKey(Language, on_delete=models.CASCADE,related_name="src_requests")
-    dest_language = models.ForeignKey(Language, on_delete=models.CASCADE,related_name="dest_requests")
+    src_language = models.ForeignKey(Language, on_delete=models.CASCADE, related_name="src_requests")
+    dest_language = models.ForeignKey(Language, on_delete=models.CASCADE, related_name="dest_requests")
     category = models.ForeignKey(TranslationCategory, on_delete=models.CASCADE)
+    request_date = models.DateTimeField(default=timezone.now)
 
 
 class TranslationOffer (models.Model):
@@ -150,12 +150,15 @@ class TranslationOffer (models.Model):
     treated = models.BooleanField(default=False)
     accepted = models.BooleanField(default=False)
     notes = models.TextField(blank=True)
+    offer_date = models.DateTimeField(default=timezone.now)
+    accept_offer_date = models.DateTimeField()
 
 
 class TranslationResponse(models.Model):
     offer = models.ForeignKey(TranslationOffer, on_delete=models.CASCADE)
     file = models.FileField(upload_to=response_file_naming)
     done = models.BooleanField(default=False)
+    response_date = models.DateTimeField(default=timezone.now)
 
 
 def pre_save_profile_receiver(sender, instance, *args, **kwargs):
@@ -166,9 +169,10 @@ def pre_save_profile_receiver(sender, instance, *args, **kwargs):
 
 pre_save.connect(pre_save_profile_receiver, sender=UserProfile)
 
+
 def update_translator_rate(sender, instance, *args, **kwargs):
-    instance.translator.global_rate =  instance.translator.rate_set.all().aggregate(models.Avg('rate'))
+    instance.translator.global_rate = instance.translator.rate_set.all().aggregate(models.Avg('rate'))
     instance.translator.save()
 
 
-post_save.connect(update_translator_rate,sender=Rate)
+post_save.connect(update_translator_rate, sender=Rate)

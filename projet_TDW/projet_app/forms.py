@@ -1,9 +1,16 @@
 from django import forms
 from django.contrib.auth.validators import ASCIIUsernameValidator
+from .models import TranslationCategory, Language
 from django.core.validators import RegexValidator
 
 #We define some custom validators here
 password_validator = RegexValidator(regex=r".{8,}",message="Votre mot de passe doit contenir au moins 8 caractères")
+file_name_pdf_validator = RegexValidator(regex=r".*pdf",message="Votre fichier doit être de format PDF")
+
+#these two for providing the sets of choices for language and category choice fields
+LANGUAGE_NAMES = tuple([(i.pk,i.name) for i in Language.objects.all()])
+CATEGORY_NAMES = tuple([(i.pk,i.name) for  i in TranslationCategory.objects.all()])
+
 
 class AddUserForm(forms.Form):
     family_name = forms.CharField(label='',max_length=30,widget=forms.TextInput(  attrs= {'placeholder': 'Prenom','class': 'col-5 m-2 form-control'}))
@@ -18,3 +25,12 @@ class AddUserForm(forms.Form):
         attrs={'placeholder': 'Wilaya', 'class': 'col-5 m-2 form-control'}))
     commune = forms.CharField(label='', max_length=15, widget=forms.TextInput(
         attrs={'placeholder': 'Commune', 'class': 'col-5 m-2 form-control'}))
+
+class AddTranslatorForm(AddUserForm):
+    languages = forms.MultipleChoiceField(choices=Language.objects.all().values_list("id", "name"), widget=forms.CheckboxSelectMultiple,required=True)
+    categories = forms.MultipleChoiceField(choices=TranslationCategory.objects.all().values_list("id", "name"), widget=forms.CheckboxSelectMultiple,required=True)
+    cv = forms.FileField(required=True, label="Choisir un fichier à envoyer",validators=[file_name_pdf_validator])
+    assrmented_file = forms.FileField(required=False,label="Choisir un fichier à envoyer",validators=[file_name_pdf_validator])
+    ref1 = forms.FileField(required=True, label="Choisir un fichier à envoyer (Ce champs est requis)",validators=[file_name_pdf_validator])
+    ref2 = forms.FileField(label="Choisir un fichier à envoyer", required=False,validators=[file_name_pdf_validator])
+    ref3 = forms.FileField(label="Choisir un fichier à envoyer", required=False,validators=[file_name_pdf_validator])

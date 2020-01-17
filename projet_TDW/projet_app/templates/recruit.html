@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+<!--azmdjamzdojamdjamo-->
+{% block title %} Bienvenue {% endblock %} {% block content %} {% load static %}
+<h1
+  class="text-center font-weight-bold jumbotron w-75 container-fluid text-secondary"
+>
+  Bienvenue, traducteur!
+
+  
+
+</h1>
+{% for message in messages %}
+    <p
+        {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %} class="text-center text-danger" {% endif %}
+        {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %} class="text-center text-success" {% endif %}
+    >{{ message }}</p>
+    {% endfor %} 
+<form action="{% url 'projet_app:recruit' %}" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+  <h5 class="text-center mt-4">Vos informations personnelles SVP</h5>
+
+  <div class="row w-80 container-fluid  justify-content-center">
+    <span class="text-danger">{{form.family_name.errors}}</span> {{form.family_name}}<span class="text-danger"> {{form.first_name.errors}}</span>
+    {{form.first_name}}<span class="text-danger"> {{form.email.errors}}</span> {{form.email}}
+    <span class="text-danger">{{form.password.errors}}</span> {{form.password}} {{form.phone.errors}}</span>
+    {{form.phone}} <span class="text-danger">{{form.address.errors}}</span> {{form.address}}
+    <span class="text-danger">{{wilaya.family_name.errors}}</span> {{form.wilaya}} <span class="text-danger">{{form.commune.errors}}</span>
+    {{form.commune}}
+  </div>
+  <hr />
+  <h5 class="text-center my-4">Données relatives aux traductions</h5>
+  <div class="row w-80 justify-content-center container-fluid">
+    <div class="col-1"></div>
+    <div class="col justify-content-center text-center">
+      <h6 class="text-center ">Cochez les langues que vous maîtrisez</h6>
+      <div class="row  justify-content-center container-fluid text-center">
+        <span class="text-danger">{{form.languages.errors}}</span> {% for checkbox in form.languages %}
+        <div class="col-3 m-1 text-center">
+          {{ checkbox.tag }} {{ checkbox.choice_label }}
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="col justify-content-center text-center">
+      <h6 class="text-center ">
+        Cochez les catégories de traduction que vous désirez faire
+      </h6>
+      <div class="row  justify-content-center container-fluid text-center">
+        <span class="text-danger">{{form.categories.errors}}</span> {% for checkbox in form.categories %}
+        <div class="col-10 m text-center">
+          {{ checkbox.tag }} {{ checkbox.choice_label }}
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="col-1"></div>
+  </div>
+  <hr />
+  <h5 class="text-center my-4">CV et certifications</h5>
+  
+  <div class="ml-4 row  container-fluid justify-content-center">
+      <div class="col-1"></div>
+    <div class="col container-fluid justify-content-center">
+      <h6 class="text-center container-fluid">Votre CV SVP (en format PDF)</h6>
+      
+    </div>
+    <div class="col container-fluid justify-content-center">
+        <h6 class="ml-2 text-center container-fluid">Si vous êtes assermenté(e), veuillez joindre un fichier PDF en attestant (Sinon, merci de laisser ce champ vide)</h6>
+        
+      </div>
+      <div class="col container-fluid justify-content-center">
+        <h6 class="ml-2 text-center container-fluid">Vos certifications SVP (Note: La première est obligatoire)</h6>
+        
+      </div>
+      <div class="col-1"></div>
+  </div>
+  <div class="row">
+      <div class="col-1"></div>
+      <div class="col">
+        <span class="text-danger text-center container-fluid">{{form.cv.errors}}</span>
+        <span class="btn btn-primary text-center container-fluid my-2">{{form.cv}}</span>
+      </div>
+      <div class="col">
+        <span class="text-danger text-center container-fluid">{{form.assrmented_file.errors}}</span>
+        <span class="btn btn-primary text-center container-fluid my-2">{{form.assrmented_file}}</span>
+      </div>
+      <div class="col">
+        <span class="text-danger text-center container-fluid">{{form.ref1.errors}}</span>
+        <span class="btn btn-primary my-2 container-fluid" style="">{{form.ref1}}</span>
+        <span class="text-danger text-center container-fluid">{{form.ref2.errors}}</span>
+        <span class="btn btn-primary my-2 container-fluid" style="">{{form.ref2}}</span>
+        <span class="text-danger text-center container-fluid">{{form.ref3.errors}}</span>
+        <span class="btn btn-primary my-2 container-fluid" style="">{{form.ref3}}</span>
+      </div>
+      <div class="col-1"></div>
+  </div>
+  <hr class="my-3">
+  <div class="row container-fluid justify-content-center">
+    <input
+      type="submit"
+      value="Bienvenue sur notre site !"
+      class="text-center btn btn-primary font-weight-bold text-white p-3 px-5 w-75 bg-success"
+    />
+  </div>
+  
+</form>
+{% endblock %}

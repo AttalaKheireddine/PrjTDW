@@ -15,7 +15,7 @@ urlpatterns = [
     #those are for our pages
     url(r'my-profile$',views.HomeView.as_view(),name="my profile"),
     url(r'profiles/(?P<slug>[\w\d-]+)$',views.HomeView.as_view(),name="profile"),
-    url(r'translator-recruit$',views.HomeView.as_view(),name="recruit"),
+    url(r'translator-recruit$',views.RecruitTranslator.as_view(),name="recruit"),
     url(r"a-propos$",views.HomeView.as_view(),name="a propos"),
     url(r"translators$",views.HomeView.as_view(),name="translators"),
     url(r"translation-types$",views.HomeView.as_view(),name="types"),

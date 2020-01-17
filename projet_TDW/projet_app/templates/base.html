@@ -68,7 +68,7 @@
               ></a>
             </li>
             <li class="nav-item col-lg text-center">
-              <a class="" href="#"
+              <a class="" href="{% url 'projet_app:recruit' %}"
                 >Recrutement <span class="sr-only text-primary"></span
               ></a>
             </li>
@@ -156,7 +156,11 @@
           <a class="text-white font-weight-bold" href="#">Blogs</a>
         </li>
         <li class="col-lg text-center ">
-          <a class="text-white font-weight-bold" href="#">Recrutement</a>
+          <a
+            class="text-white font-weight-bold"
+            href="{% url 'projet_app:recruit' %}"
+            >Recrutement</a
+          >
         </li>
         <li class="col-lg text-center text-white font-weight-bold">
           <a class="text-white font-weight-bold" href="#">A propos</a>
