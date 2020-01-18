@@ -11,6 +11,7 @@ urlpatterns = [
     url(r"^login",views.Login.as_view(),name="login"),
     url(r"^register",views.Register.as_view(),name="register"),
     url(r"^send-request",views.SendRequest.as_view(),name="send_request"),
+    url(r"^translator-transactions/(?P<pk>[\d]+)/refuse$", views.RefuseOffer.as_view(), name="refuse_request"),
 
     #those are for our pages
     url(r'my-profile$',views.HomeView.as_view(),name="my profile"),
@@ -20,6 +21,7 @@ urlpatterns = [
     url(r"translators$",views.HomeView.as_view(),name="translators"),
     url(r"translation-types$",views.HomeView.as_view(),name="types"),
     url(r"^$",views.HomeView.as_view(),name="home"),
-
-
+    url(r"^translator-transactions$",views.AllTranslatorTransactions.as_view(),name="translator_transactions"),
+    url(r"^translator-transactions/(?P<pk>[\d]+)$",views.TranslationRequestDetails.as_view(),name="request_details"),
+    url(r"^client-transactions$",views.AllClientTransactions.as_view(),name="client_transactions")
 ]

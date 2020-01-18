@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Vos transactions{% endblock %}
+{% block content %}
+
+<div class="row justify-center">
+    <div class="col-1"></div>
+    <div class="col">
+        <h3 class=" text-center my-3">
+            Vos demandes de traduction
+        </h3>
+        {% for request in requests %}
+        <div class="card">
+            <h5 class="card-header text-center">Demande de: {{ request.full_name }}</h5>
+            <div class="card-body">
+                <h5 class="card-title">Categorie : {{request.category}}</h5>
+                <div class="row align-content-center">
+                    <p class="col align-self-center">
+                        De : {{request.src_language}}
+                    </p>
+                    <p class="col align-self-center">
+                        Vers : {{request.dest_language}}
+                    </p>
+                    <p class="col align-self-center">
+                        <a href="{% url 'projet_app:request_details' pk=request.pk %}" class="btn btn-primary">Plus de
+                            détails</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p class="text-center">
+            Vous n'avez aucune demande de traduction pour le moment
+        </p>
+        {% endfor %}
+
+    </div>
+    <div class="col"></div>
+    <div class="col-1"></div>
+</div>
+
+{% endblock %}

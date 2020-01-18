@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
-from .models import TranslationCategory, Language, TranslatorProfile, UserProfile, TranslationRequest,ReferenceFile
-from .forms import AddUserForm, AddTranslatorForm
+from .models import TranslationCategory, Language, TranslatorProfile, UserProfile, TranslationRequest,ReferenceFile,TranslationOffer
+from .forms import AddUserForm, AddTranslatorForm,TranslationOfferForm
 from django.views.generic import View
 from django.db.models import Q
 from django.db import IntegrityError
@@ -87,17 +87,17 @@ class Register(View):
 
 class SendRequest(View):
     def post(self, request):
-        family_name = request.POST["family_name"]
-        first_name = request.POST["first_name"]
-        email = request.POST["email"]
-        phone = request.POST["phone"]
-        address = request.POST["address"]
-        translators = request.POST["translators"]
-        src_lang = request.POST["src_lang"]
-        dest_lang = request.POST["dest_lang"]
-        category = request.POST["category"]
-        notes = request.POST["notes"]
-        file = request.FILES.get('file_req')
+        family_name = request.POST.get("family_name","")
+        first_name = request.POST.get("first_name","")
+        email = request.POST.get("email","")
+        phone = request.POST.get("phone","")
+        address = request.POST.get("address","")
+        translators = request.POST.get("translators",'')
+        src_lang = request.POST.get("src_lang",'')
+        dest_lang = request.POST.get("dest_lang",'')
+        category = request.POST.get("category",'')
+        notes = request.POST.get("notes",'')
+        file = request.FILES.get('file_req','')
 
         for i in [family_name, first_name, email, phone, address]:
             if not i:
@@ -152,6 +152,10 @@ class RecruitTranslator(View):
         new_form = AddTranslatorForm(request.POST,request.FILES)
 
         if new_form.is_valid():
+            if len(new_form.cleaned_data['languages'])==1:
+                messages.add_message(request, messages.ERROR,
+                                     'Attention: Un traducteur doit maîtriser plus d\'une seule langue!' )
+                return render(request, "recruit.html", {"form": new_form})
             user = User()
             user.username = new_form.cleaned_data['email']
             user.set_password(new_form.cleaned_data['password'])
@@ -197,4 +201,64 @@ class RecruitTranslator(View):
             messages.add_message(request, messages.ERROR,
                                  'Merci de bien vouloir corriger les errueres signalées')
             return render(request,"recruit.html", {'form': new_form})
+
+class AllTranslatorTransactions(View,LoginRequiredMixin):
+    def get(self,request):
+        try:
+            translations_requests = request.user.profile.translator_profile.translation_requests.filter(treated=False).order_by("-request_date")
+        except:
+            return render(request,"forbidden_request_detail.html")
+        return render(request,"translator_transactions.html",{'requests':translations_requests})
+
+
+
+class AllClientTransactions(View,LoginRequiredMixin):
+    def get(self,request):
+        qs = Q()
+        #qs &=Q(request__requester=request.user.profile)
+        #qs2 = Q(accepted=False)
+        qs &= Q(treated=False)
+        offers = TranslationOffer.objects.filter(qs)
+
+        return render(request,"client_transactions.html",{"offers":offers})
+
+class TranslationRequestDetails(View,LoginRequiredMixin):
+    def get(self,request,pk):
+        trans_req = TranslationRequest.objects.filter(pk=pk)[0]
+        try:
+            if not request.user.profile.translator_profile == trans_req.translator:
+                return render(request, "forbidden_request_detail.html")
+        except:
+            return render(request, "forbidden_request_detail.html")
+        return render(request, "request_detail.html",{"request":trans_req,"form":TranslationOfferForm()})
+
+    def post(self,request,pk):
+        offer_form = TranslationOfferForm(request.POST)
+        if offer_form.is_valid():
+            offer = TranslationOffer()
+            tra_request =  TranslationRequest.objects.filter(pk=pk)[0]
+            offer.request = tra_request
+            tra_request.treated = True
+            tra_request.save()
+            offer.after_price = offer_form.cleaned_data["price"]
+            offer.accept_price = offer_form.cleaned_data["accept_price"] if offer_form.cleaned_data["accept_price"] else 0
+            offer.notes = offer_form.cleaned_data["notes"]
+            offer.save()
+            return redirect("projet_app:translator_transactions")
+        else:
+            return render(request, "request_detail.html", {"request": trans_req, "form": offer_form})
+
+class RefuseOffer(View,LoginRequiredMixin):
+    def get(self,request,pk):
+        trans_req = TranslationRequest.objects.filter(pk=pk)[0]
+        try:
+            if not request.user.profile.translator_profile == trans_req.translator:
+                return render(request, "forbidden_request_detail.html")
+        except:
+            return render(request, "forbidden_request_detail.html")
+        if trans_req.treated:
+            return render(request, "forbidden_request_detail.html")
+        trans_req.treated = True
+        trans_req.save()
+        return redirect("projet_app:translator_transactions")
 

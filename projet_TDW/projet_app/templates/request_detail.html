@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% block title %}Details{% endblock %}
+{% block content %}
+<div class="container-fluid row">
+    <div class="col-2"></div>
+    <div class="col">
+        <div class="card container ">
+            <h5 class="card-header text-center">Demande de: {{ request.full_name }}</h5>
+            <div class="card-body">
+                <ul>
+                    <p class=" align-self-center">
+                        Numéro de téléphone : {{request.phone_number}}
+                    </p>
+                    <p class=" align-self-center">
+                        Adresse : {{request.address}}
+                    </p>
+                    <p class=" align-self-center">
+                        Email : {{request.email}}
+                    </p>
+
+                </ul>
+            </div>
+        </div>
+        <div class="m-5">
+            <p>
+                Langue Source : {{request.src_language}}
+            </p>
+            <p>
+                Langue Destination : {{request.dest_language}}
+            </p>
+            <p>
+                Catégorie : {{request.category}}
+            </p>
+            <a href="{{ request.file.url }}" download class="btn btn-primary ">Télécharger le fichier à
+                traduire</a>
+        </div>
+
+        <div class=" card container ">
+            <h5 class=" card-header text-center">Notes du client</h5>
+            <div class="card-body text-center">
+                {% if request.notes %}
+                {{request.notes}}
+                {% else %}
+                Votre client n'a rien ajouté de particulier
+                {% endif %}
+            </div>
+        </div>
+        <hr>
+        <h5 class="text-center my-2">Si vous voulez accepter la demande, veuillez remplir le formulaire. Sinon, <a
+                href="{% url 'projet_app:refuse_request' pk=request.pk %}" class="btn btn-danger">Refusez la demande</a>
+        </h5>
+        <hr>
+        <div>
+            <form action="{% url 'projet_app:request_details' pk=request.pk %}" method="POST"
+                class="  w-75 container-fluid">
+                {% csrf_token %}
+                <div class="row justify-content-center align-content-center">
+                    <div class="col align-self-center">
+                        Prix après traduction (Champ requis) :
+                    </div>
+                    <div class="col">
+                        {{form.price}}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col align-self-center">
+                        Prix à l'avance :
+                    </div>
+                    <div class="col">
+                        {{form.accept_price}}
+                    </div>
+                </div>
+                <p class="text-center text-secondary my-2 w-75 container-fluid">
+                    Ce prix devra être payé à l'avance par le client (Laisser ce champ vide équivaut à 0)
+                </p>
+                <h6 class="text-center">Si vous avez des remarques, merci de les préciser ici </h6>
+                <div>
+                    {{form.notes}}
+                </div>
+                <input type="submit" value="Accepter la demande"
+                    class="btn btn-success text-center container-fluid my-2">
+            </form>
+        </div>
+
+
+    </div>
+</div>
+<div class="col-2"></div>
+</div>
+
+{% endblock %}

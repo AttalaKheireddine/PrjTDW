@@ -129,7 +129,7 @@ class TranslationRequest (models.Model):
     address = models.CharField(max_length=100, blank=True, null=False)
     phone_number = models.CharField(max_length=15)
     email = models.EmailField()
-    translator = models.ForeignKey(TranslatorProfile, on_delete=models.CASCADE, blank=True)
+    translator = models.ForeignKey(TranslatorProfile, on_delete=models.CASCADE, blank=True,related_name="translation_requests")
     treated = models.BooleanField(default=False)
     notes = models.TextField(blank=True)
     file = models.FileField(upload_to=request_file_naming)
@@ -144,14 +144,14 @@ class TranslationOffer (models.Model):
     accept_price = models.FloatField(
         validators=[MinValueValidator(0), MaxValueValidator(100000)],
     )
-    full_price = models.FloatField(
+    after_price = models.FloatField(
         validators=[MinValueValidator(0), MaxValueValidator(1000000000)],
     )
     treated = models.BooleanField(default=False)
     accepted = models.BooleanField(default=False)
     notes = models.TextField(blank=True)
     offer_date = models.DateTimeField(default=timezone.now)
-    accept_offer_date = models.DateTimeField()
+    accept_offer_date = models.DateTimeField(blank=True,null=True)
 
 
 class TranslationResponse(models.Model):

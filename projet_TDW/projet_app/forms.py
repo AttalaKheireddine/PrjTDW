@@ -46,3 +46,10 @@ class AddTranslatorForm(AddUserForm):
         for field in self.fields.values():
             field.error_messages = {'required': 'Ce champ est requis'.format(
                 fieldname=field.label)}
+
+class TranslationOfferForm(forms.Form):
+    price = forms.FloatField(widget=forms.NumberInput(attrs={'class': 'col-5 m-2 form-control'}))
+    accept_price = forms.FloatField(widget=forms.NumberInput(attrs={'class': 'col-5 m-2 form-control'}),required=False)
+    notes = forms.CharField(widget=forms.Textarea(attrs={'class':"form-control h-25"}),required=False)
+
+
