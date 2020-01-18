@@ -23,5 +23,7 @@ urlpatterns = [
     url(r"^$",views.HomeView.as_view(),name="home"),
     url(r"^translator-transactions$",views.AllTranslatorTransactions.as_view(),name="translator_transactions"),
     url(r"^translator-transactions/(?P<pk>[\d]+)$",views.TranslationRequestDetails.as_view(),name="request_details"),
-    url(r"^client-transactions$",views.AllClientTransactions.as_view(),name="client_transactions")
+    url(r"^client-transactions$",views.AllClientTransactions.as_view(),name="client_transactions"),
+    url(r"^client-transactions/(?P<pk>[\d]+)/accept$",views.ClientAccept.as_view(),name="client_accept"),
+    url(r"^client-transactions/(?P<pk>[\d]+)/refuse$",views.ClientRefuse.as_view(),name="client_refuse")
 ]

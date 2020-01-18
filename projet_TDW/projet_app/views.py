@@ -8,6 +8,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.models import User
 from django.contrib import messages
+from django.utils import timezone
 # Create your views here.
 
 
@@ -215,10 +216,10 @@ class AllTranslatorTransactions(View,LoginRequiredMixin):
 class AllClientTransactions(View,LoginRequiredMixin):
     def get(self,request):
         qs = Q()
-        #qs &=Q(request__requester=request.user.profile)
-        #qs2 = Q(accepted=False)
+        qs &=Q(request__requester=request.user.profile)
+        qs &= Q(accepted=False)
         qs &= Q(treated=False)
-        offers = TranslationOffer.objects.filter(qs)
+        offers = TranslationOffer.objects.filter(qs).order_by("-offer_date")
 
         return render(request,"client_transactions.html",{"offers":offers})
 
@@ -229,6 +230,8 @@ class TranslationRequestDetails(View,LoginRequiredMixin):
             if not request.user.profile.translator_profile == trans_req.translator:
                 return render(request, "forbidden_request_detail.html")
         except:
+            return render(request, "forbidden_request_detail.html")
+        if trans_req.treated:
             return render(request, "forbidden_request_detail.html")
         return render(request, "request_detail.html",{"request":trans_req,"form":TranslationOfferForm()})
 
@@ -244,6 +247,7 @@ class TranslationRequestDetails(View,LoginRequiredMixin):
             offer.accept_price = offer_form.cleaned_data["accept_price"] if offer_form.cleaned_data["accept_price"] else 0
             offer.notes = offer_form.cleaned_data["notes"]
             offer.save()
+            messages.add_message(request, messages.SUCCESS, 'Opération réussie!')
             return redirect("projet_app:translator_transactions")
         else:
             return render(request, "request_detail.html", {"request": trans_req, "form": offer_form})
@@ -260,5 +264,30 @@ class RefuseOffer(View,LoginRequiredMixin):
             return render(request, "forbidden_request_detail.html")
         trans_req.treated = True
         trans_req.save()
+        messages.add_message(request, messages.SUCCESS, 'Opération réussie!')
         return redirect("projet_app:translator_transactions")
 
+class ClientAccept(View,LoginRequiredMixin):
+    def get(self,request,pk):
+        offer = TranslationOffer.objects.filter(pk=pk)[0]
+        if offer.treated or offer.accepted:
+            return render(request, "forbidden_request_detail.html")
+        if offer.request.requester != request.user.profile:
+            return render(request, "forbidden_request_detail.html")
+        offer.accepted=True
+        messages.add_message(request, messages.SUCCESS, 'Opération réussie!')
+        offer.accept_offer_date = timezone.now()
+        offer.save()
+        return redirect("projet_app:client_transactions")
+
+class ClientRefuse(View,LoginRequiredMixin):
+    def get(self,request,pk):
+        offer = TranslationOffer.objects.filter(pk=pk)[0]
+        if offer.treated or offer.accepted:
+            return render(request, "forbidden_request_detail.html")
+        if offer.request.requester != request.user.profile:
+            return render(request, "forbidden_request_detail.html")
+        offer.treated=True
+        messages.add_message(request, messages.SUCCESS, 'Opération réussie!')
+        offer.save()
+        return redirect("projet_app:client_transactions")

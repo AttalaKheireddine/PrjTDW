@@ -1,34 +1,48 @@
 {% extends "base.html" %}
 {% block title %}Vos transactions{% endblock %}
 {% block content %}
+{% if messages %}
+{% for message in messages %}
+<h3 class="text-center text-success">
+    {{message}}
+</h3>
+{% endfor %}
+{% endif %}
 <div class="row">
     <div class="col-2"></div>
     <div class="col">
         <h3 class=" text-center my-3">
             Vos offres de traduction
         </h3>
-        {% for offer in offeers %}
+
+
+        {% for offer in offers %}
         <div class="card">
-            <h5 class="card-header text-center">offre: {{ offer.request.translator.full_name }}</h5>
+            <h5 class="card-header text-center">Offre de : {{ offer.request.translator.user_profile.full_name }}</h5>
             <div class="card-body">
-                <h5 class="card-title"><a href="#">Voir le profil</a></h5>
+                <h5 class="card-title text-center"><a href="#" class="text-center">Voir le profil</a></h5>
                 <div class="row align-content-center">
-                    <p class="col align-self-center">
-                        Prix en avance:{{offer.accept_price}}
+                    <p class="col align-self-center text-center">
+                        Prix en avance : {{offer.accept_price}}DA
                     </p>
-                    <p class="col align-self-center">
-                        Prix après traduction : {{offer.after_price}}
+                    <p class="col align-self-center text-center">
+                        Prix après traduction : {{offer.after_price}}DA
                     </p>
                 </div>
                 {% if offer.notes %}
-                <h6>Notes du traducteur</h6>
-                <p>{{offer.notes}}</p>
+                <h6 class="text-center">Notes du traducteur</h6>
+                <p class="text-center">{{offer.notes}}</p>
                 {% endif %}
-                <a href="{{ offer.request.file.url }}" download class="btn btn-primary ">Télécharger le fichier à
+                <a href="{{ offer.request.file.url }}" download
+                    class="container-fluid btn btn-primary text-center">Télécharger le
+                    fichier à
                     traduire</a>
-                <div class="row">
-                    <a href="#" class="col btn btn-success">Accpeter</a>
-                    <a href="#" class="col btn btn-success">Refuser</a>
+                <hr>
+                <div class="row ">
+                    <a href="{% url 'projet_app:client_accept' pk=offer.pk %}"
+                        class="col btn btn-success mx-3">Accpeter</a>
+                    <a href="{% url 'projet_app:client_refuse' pk=offer.pk %}"
+                        class="col btn btn-danger mx-3">Refuser</a>
                 </div>
             </div>
         </div>
