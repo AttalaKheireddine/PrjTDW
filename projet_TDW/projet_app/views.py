@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
-from .models import TranslationCategory, Language, TranslatorProfile, UserProfile, TranslationRequest,ReferenceFile,TranslationOffer
+from .models import TranslationCategory, Language, TranslatorProfile, UserProfile, TranslationRequest
+from .models import ReferenceFile,TranslationOffer,TranslationResponse
 from .forms import AddUserForm, AddTranslatorForm,TranslationOfferForm,SendFileForm
 from django.views.generic import View
 from django.db.models import Q
@@ -218,6 +219,40 @@ class AllTranslatorTransactions(View,LoginRequiredMixin):
         offers = TranslationOffer.objects.filter(qs)
         return render(request,"translator_transactions.html",{'requests':translations_requests,"offers":offers,'form':form})
 
+    def post(self,request):
+        try:
+            translations_requests = request.user.profile.translator_profile.translation_requests.filter(treated=False).order_by("-request_date")
+        except:
+            return render(request,"forbidden_request_detail.html")
+        form = SendFileForm(request.POST,request.FILES)
+        if form.is_valid():
+            pk = request.POST.get('pk')
+            file = form.files.get("file")
+            try:
+                offer = TranslationOffer.objects.filter(pk=pk)[0]
+            except:
+                return render(request, "forbidden_request_detail.html")
+            if offer.request.translator != request.user.profile.translator_profile:
+                return render(request, "forbidden_request_detail.html")
+            if offer.treated or not offer.accepted:
+                return render(request, "forbidden_request_detail.html")
+            offer.treated = True
+            offer.save()
+            response = TranslationResponse()
+            response.offer = offer
+            response.file = file
+            response.save()
+            messages.add_message(request, messages.SUCCESS, 'Opération réussie')
+            return redirect("projet_app:translator_transactions")
+
+        else:
+            qs = Q()
+            qs &= Q(treated=False)
+            qs &= Q(accepted=True)
+            qs &= Q(request__translator=request.user.profile.translator_profile)
+            offers = TranslationOffer.objects.filter(qs)
+            return render(request, "translator_transactions.html",
+                          {'requests': translations_requests, "offers": offers, 'form': form})
 
 class AllClientTransactions(View,LoginRequiredMixin):
     def get(self,request):
@@ -226,8 +261,12 @@ class AllClientTransactions(View,LoginRequiredMixin):
         qs &= Q(accepted=False)
         qs &= Q(treated=False)
         offers = TranslationOffer.objects.filter(qs).order_by("-offer_date")
+        qs = Q()
+        qs &=Q(offer__request__requester=request.user.profile)
+        qs &= Q(done = False)
+        responses = TranslationResponse.objects.filter(qs)
+        return render(request,"client_transactions.html",{"offers":offers,"responses":responses})
 
-        return render(request,"client_transactions.html",{"offers":offers})
 
 class TranslationRequestDetails(View,LoginRequiredMixin):
     def get(self,request,pk):
@@ -296,4 +335,19 @@ class ClientRefuse(View,LoginRequiredMixin):
         offer.treated=True
         messages.add_message(request, messages.SUCCESS, 'Opération réussie!')
         offer.save()
+        return redirect("projet_app:client_transactions")
+
+class TreatResponse(View,LoginRequiredMixin):
+    def get(self,request,pk):
+        try:
+            response = TranslationResponse.objects.filter(pk=pk)[0]
+        except:
+            return render(request, "forbidden_request_detail.html")
+
+        if response.offer.request.requester != request.user.profile:
+            return render(request, "forbidden_request_detail.html")
+
+        response.done=True
+        response.save()
+        messages.add_message(request, messages.SUCCESS, 'Opération réussie!')
         return redirect("projet_app:client_transactions")

@@ -12,6 +12,7 @@ urlpatterns = [
     url(r"^register",views.Register.as_view(),name="register"),
     url(r"^send-request",views.SendRequest.as_view(),name="send_request"),
     url(r"^translator-transactions/(?P<pk>[\d]+)/refuse$", views.RefuseOffer.as_view(), name="refuse_request"),
+    url(r"treat-response//(?P<pk>[\d]+)$",views.TreatResponse.as_view(),name="treat_response"),
 
     #those are for our pages
     url(r'my-profile$',views.HomeView.as_view(),name="my profile"),

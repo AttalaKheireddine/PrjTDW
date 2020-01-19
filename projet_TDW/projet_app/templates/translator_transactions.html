@@ -83,12 +83,17 @@
 
         </div>
         <hr>
-        <form class="row" method="POST" enctype="multipart/form-data" action="">
-
+        <form class="row" method="POST" enctype="multipart/form-data"
+            action="{% url 'projet_app:translator_transactions' %}">
+            {% csrf_token %}
+            <div class="text-center text-danger">
+                {{form.file.errors}}
+            </div>
             <div type="file" href="#" class="col btn btn-primary mx-3">
                 {{form.file}}
             </div>
-            <input type="submit" href="#" class="col btn btn-success mx-3" value="Envoyer la réponse">
+            <input type="hidden" name="pk" value="{{offer.pk}}">
+            <input type="submit" class="col btn btn-success mx-3" value="Envoyer la réponse">
         </form>
         <hr>
         {% empty %}

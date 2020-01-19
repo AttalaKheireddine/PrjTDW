@@ -59,8 +59,7 @@ class TranslationOfferForm(forms.Form):
                 fieldname=field.label)}
 
 class SendFileForm(forms.Form):
-    file = forms.FileField(label="Choisir un fichier à envoyer", required=False,validators=[file_name_pdf_validator])
-
+    file = forms.FileField(label="Choisir un fichier à envoyer",validators=[file_name_pdf_validator])
     def __init__(self, *args, **kwargs):
         super(SendFileForm, self).__init__(*args, **kwargs)
         for field in self.fields.values():
