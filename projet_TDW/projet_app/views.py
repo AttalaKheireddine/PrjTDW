@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .models import TranslationCategory, Language, TranslatorProfile, UserProfile, TranslationRequest,ReferenceFile,TranslationOffer
-from .forms import AddUserForm, AddTranslatorForm,TranslationOfferForm
+from .forms import AddUserForm, AddTranslatorForm,TranslationOfferForm,SendFileForm
 from django.views.generic import View
 from django.db.models import Q
 from django.db import IntegrityError
@@ -209,8 +209,14 @@ class AllTranslatorTransactions(View,LoginRequiredMixin):
             translations_requests = request.user.profile.translator_profile.translation_requests.filter(treated=False).order_by("-request_date")
         except:
             return render(request,"forbidden_request_detail.html")
-        return render(request,"translator_transactions.html",{'requests':translations_requests})
 
+        form = SendFileForm()
+        qs = Q()
+        qs&=Q(treated=False)
+        qs &= Q(accepted=True)
+        qs &= Q(request__translator=request.user.profile.translator_profile)
+        offers = TranslationOffer.objects.filter(qs)
+        return render(request,"translator_transactions.html",{'requests':translations_requests,"offers":offers,'form':form})
 
 
 class AllClientTransactions(View,LoginRequiredMixin):

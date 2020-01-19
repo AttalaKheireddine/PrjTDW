@@ -15,7 +15,8 @@
             Vos demandes de traduction
         </h3>
         {% for request in requests %}
-        <div class="card">
+        <hr>
+        <div class="card m2">
             <h5 class="card-header text-center">Demande de: {{ request.full_name }}</h5>
             <div class="card-body">
                 <h5 class="card-title">Categorie : {{request.category}}</h5>
@@ -40,7 +41,62 @@
         {% endfor %}
 
     </div>
-    <div class="col"></div>
+    <div class="col">
+        <h3 class=" text-center my-3">
+            Vos offres acceptées
+        </h3>
+
+        {% for offer in offers %}
+        <div class="card m2">
+            <h5 class="card-header text-center">Offre acceptée par : {{ offer.request.full_name }}</h5>
+            <div class="card-body">
+                <div class="row align-content-center ml-2">
+                    <p class="col align-self-center">
+                        Adresse: {{offer.request.address}}
+                    </p>
+                </div>
+                <div class="row align-content-center ml-2">
+                    <p class="col align-self-center">
+                        Tel : {{offer.request.phone_number}}
+                    </p>
+                </div>
+                <div class="row align-content-center">
+                    <p class="col align-self-center text-center">
+                        Langue destination : {{offer.request.dest_language}}
+                    </p>
+                    <p class="col align-self-center text-center">
+                        Prix : {{offer.after_price}}DA
+                    </p>
+                </div>
+                <a href="{{ offer.request.file.url }}" download
+                    class="container-fluid btn btn-primary text-center">Télécharger le
+                    fichier à
+                    traduire</a>
+                <h6 class="text-center mt-3">Notes du client</h6>
+                {% if offer.request.notes %}
+                <p class="text-center">{{offer.request.notes}}</p>
+                {% else %}
+                <p class="text-center">Votre client n'a rien ajouté</p>
+                {% endif %}
+
+            </div>
+
+        </div>
+        <hr>
+        <form class="row" method="POST" enctype="multipart/form-data" action="">
+
+            <div type="file" href="#" class="col btn btn-primary mx-3">
+                {{form.file}}
+            </div>
+            <input type="submit" href="#" class="col btn btn-success mx-3" value="Envoyer la réponse">
+        </form>
+        <hr>
+        {% empty %}
+        <p class="text-center">
+            Vous n'avez aucune offre acceptée pour le moment
+        </p>
+        {% endfor %}
+    </div>
     <div class="col-1"></div>
 </div>
 

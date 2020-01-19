@@ -17,7 +17,7 @@
 
 
         {% for offer in offers %}
-        <div class="card">
+        <div class="card m2">
             <h5 class="card-header text-center">Offre de : {{ offer.request.translator.user_profile.full_name }}</h5>
             <div class="card-body">
                 <h5 class="card-title text-center"><a href="#" class="text-center">Voir le profil</a></h5>
@@ -52,7 +52,9 @@
         </p>
         {% endfor %}
     </div>
-    <div class="col"></div>
+    <div class="col">
+
+    </div>
     <div class="col-2"></div>
 </div>
 {% endblock %}
