@@ -10,6 +10,7 @@ file_name_pdf_validator = RegexValidator(regex=r".*pdf",message="Votre fichier d
 #these two for providing the sets of choices for language and category choice fields
 LANGUAGE_NAMES = tuple([(i.pk,i.name) for i in Language.objects.all()])
 CATEGORY_NAMES = tuple([(i.pk,i.name) for  i in TranslationCategory.objects.all()])
+RATES = [(str(i),str(i)) for i in range(1,11)]
 
 
 class AddUserForm(forms.Form):
@@ -65,4 +66,11 @@ class SendFileForm(forms.Form):
         for field in self.fields.values():
             field.error_messages = {'required': 'Ce champ est requis'.format(
                 fieldname=field.label)}
+
+class ReportUserForm(forms.Form):
+    warn = forms.CharField(widget=forms.Textarea(attrs={'class': "form-control h-25"}))
+
+class RateForm(forms.Form):
+    rate = forms.TypedChoiceField(choices=RATES,coerce=int)
+
 

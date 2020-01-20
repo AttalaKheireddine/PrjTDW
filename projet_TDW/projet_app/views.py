@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from .models import TranslationCategory, Language, TranslatorProfile, UserProfile, TranslationRequest
-from .models import ReferenceFile,TranslationOffer,TranslationResponse
-from .forms import AddUserForm, AddTranslatorForm,TranslationOfferForm,SendFileForm
+from .models import ReferenceFile,TranslationOffer,TranslationResponse,Warn, Rate
+from .forms import AddUserForm, AddTranslatorForm,TranslationOfferForm,SendFileForm, ReportUserForm,RateForm
 from django.views.generic import View
 from django.db.models import Q
 from django.db import IntegrityError
@@ -242,6 +242,9 @@ class AllTranslatorTransactions(View,LoginRequiredMixin):
             response.offer = offer
             response.file = file
             response.save()
+            translator = offer.request.translator
+            translator.number_of_translations+=1
+            translator.save()
             messages.add_message(request, messages.SUCCESS, 'Opération réussie')
             return redirect("projet_app:translator_transactions")
 
@@ -337,6 +340,7 @@ class ClientRefuse(View,LoginRequiredMixin):
         offer.save()
         return redirect("projet_app:client_transactions")
 
+
 class TreatResponse(View,LoginRequiredMixin):
     def get(self,request,pk):
         try:
@@ -351,3 +355,71 @@ class TreatResponse(View,LoginRequiredMixin):
         response.save()
         messages.add_message(request, messages.SUCCESS, 'Opération réussie!')
         return redirect("projet_app:client_transactions")
+
+class UserProfileView(View, LoginRequiredMixin):
+    def get(self,request,slug):
+        warn_form = ReportUserForm()
+        try:
+            profile = UserProfile.objects.filter(slug=slug)[0]
+        except:
+            return render(request, "forbidden_request_detail.html")
+        can_rate = False
+        rate_form = None
+        if profile.translator_profile is not None:
+            qs = Q()
+            qs&= Q(offer__request__requester=request.user.profile)
+            qs &= Q(offer__request__translator=profile.translator_profile)
+            if TranslationResponse.objects.filter(qs).exists():
+                can_rate=True
+                print("zapdozzadoazoapeoapeoapeoaepoa")
+            print("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh")
+            rate_form = RateForm()
+        return render(request, "profile.html",{"profile":profile,'warn_form':warn_form,'can_rate':can_rate,"rate_form":rate_form})
+
+
+class Report(View,LoginRequiredMixin):
+    def post(self,request,slug):
+        try:
+            profile = UserProfile.objects.filter(slug=slug)[0]
+        except:
+            return render(request, "forbidden_request_detail.html")
+        form =ReportUserForm(request.POST)
+        if form.is_valid():
+            report = Warn()
+            report.warner =request.user.profile
+            report.warned_against = profile
+            report.warn_text = form.cleaned_data['warn']
+            report.save()
+            messages.add_message(request, messages.SUCCESS, 'Votre signalement nous a été transféré. Nous le traiterons le plus tôt possible')
+            return redirect("projet_app:profile",slug=slug)
+        else:
+            return render(request, "profile.html", {"profile": profile, 'warn_form': warn_form,"rate_form":RateForm()})
+
+class RateView(View,LoginRequiredMixin):
+    def post(self,request,slug):
+        try:
+            profile = UserProfile.objects.filter(slug=slug)[0]
+        except:
+            return render(request, "forbidden_request_detail.html")
+        form =RateForm(request.POST)
+        if form.is_valid():
+            qs=Q()
+            qs &= Q(rater=request.user.profile)
+            try:
+                qs &= Q(translator = profile.translator_profile)
+            except:
+                return render(request, "forbidden_request_detail.html")
+            if Rate.objects.filter(qs).exists():
+                rate =  Rate.objects.filter(qs)[0]
+            else:
+                rate = Rate()
+                rate.rater = request.user.profile
+                rate.translator = profile.translator_profile
+            rate.rate = form.cleaned_data["rate"]
+            rate.save()
+            messages.add_message(request, messages.SUCCESS,
+                                 'Merci pour votre opinion. Continuez à contribuer à Translate!')
+            return redirect("projet_app:profile", slug=slug)
+        else :
+            return render(request, "profile.html",
+                          {"profile": profile, 'warn_form': ReportUserForm(), "rate_form": form})

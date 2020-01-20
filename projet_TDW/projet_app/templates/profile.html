@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}{{profile.full_name}}{% endblock %}
+{% block content %}
+{% load static %}
+<script src="{% static 'js/custom/profile.js' %}"></script>
+<div class="row">
+    <div class="col-3">
+    </div>
+    <div class="col">
+        {% if messages %}
+        {% for message in messages %}
+        <h3 class="text-center text-success">
+            {{message}}
+        </h3>
+        {% endfor %}
+        {% endif %}
+        <h2>{{profile.full_name}}</h2>
+        <p>Adresse :
+            {{profile.address}}, {{profile.commune}}, {{profile.wilaya}}
+        </p>
+        <hr>
+        {% if profile != user.profile %}
+        <button class="btn btn-primary" id="warn_button">Signaler cet utilisateur</button>
+        <div id="form" style="display: none;" class="p-5">
+            <form action="{% url 'projet_app:report' slug=profile.slug %}" method="POST">
+                {% csrf_token %}
+                <p>Qu'avez vous noté au sujet de {{profile.full_name}}?</p>
+                {{warn_form.warn}}
+                <input type="submit" class="container-fluid btn btn-danger my-2" value="Signaler">
+            </form>
+        </div>
+        {% endif %}
+        {% if profile.translator_profile %}
+        <h2>Informations du traducteur</h2>
+        <p>nombre de traductions: {{profile.translator_profile.number_of_translations}}</p>
+        <p>Langues maîrisées : {% for language in profile.translator_profile.languages.all %} {{language }} {% endfor %}
+        </p>
+        <p>Catégories de traduction : {% for categ in profile.translator_profile.categories.all %} {{categ}}
+            {% endfor %}
+        </p>
+        <a href="{{profile.translator_profile.cv.url}}" class="btn btn-primary" download>Télécharger le CV</a>
+        <p>Télécharger les références</p>
+        {% for ref in profile.translator_profile.reference_files.all %}
+        <a href="{{ref.file.url}}" class="btn btn-info">Rérérence {{ forloop.counter }}</a>
+        {% endfor %}
+        {% endif %}
+        {% if can_rate %}
+        <form action="{% url 'projet_app:rate' slug=profile.slug %}" method="POST">
+            {% csrf_token %}
+            <p>Notez ce traducteur (remarque: Si vous avez déja noté {{profile.full_name}}, seule la dernière note
+                comptera</p>
+            {{rate_form.rate}}
+            <input type="submit" class="container-fluid btn btn-danger my-2" value="Noter ce traducteur">
+        </form>
+        {% endif %}
+
+    </div>
+    <div class="col-3"></div>
+</div>
+{% endblock %}

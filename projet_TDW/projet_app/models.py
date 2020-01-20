@@ -78,7 +78,7 @@ class Language(models.Model):
     name = models.CharField(max_length=80, unique=True)
 
     def __str__(self):
-        return self.name
+        return self.name.title()
 
 
 class TranslationCategory(models.Model):
@@ -86,7 +86,7 @@ class TranslationCategory(models.Model):
     description = models.TextField()
 
     def __str__(self):
-        return self.name
+        return self.name.title()
 
     class Meta:
         verbose_name_plural = "Categories"
@@ -107,7 +107,7 @@ class TranslatorProfile (models.Model):
 
 
 class ReferenceFile(models.Model):
-    translator = models.ForeignKey(TranslatorProfile, on_delete=models.CASCADE)
+    translator = models.ForeignKey(TranslatorProfile, on_delete=models.CASCADE,related_name="reference_files")
     file = models.FileField(upload_to=reference_file_naming)
 
 
@@ -119,9 +119,10 @@ class Rate(models.Model):
 
 class Warn (models.Model):
     warn_text = models.TextField()
-    warner = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
-    translator = models.ForeignKey(TranslatorProfile, on_delete=models.CASCADE)
-
+    warner = models.ForeignKey(UserProfile, on_delete=models.CASCADE,related_name="warns_from_set")
+    warned_against = models.ForeignKey(UserProfile, on_delete=models.CASCADE,related_name="warns_against_set")
+    treated = models.BooleanField(default=False)
+    warn_date = models.DateTimeField(default=timezone.now)
 
 class TranslationRequest (models.Model):
     requester = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
