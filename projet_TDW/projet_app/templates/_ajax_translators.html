@@ -7,20 +7,13 @@
       <h6 class="card-subtitle mb-2 text-muted">Traducteur assermenté</h6>
       {% endif %}
       <p class="card-text">
-        {% if translator.not_globale %} Note globale :
-        {{translator.global_rate}} {% endif %}
+        {% if translator.global_rate %} Note globale :
+        {{translator.global_rate}} <br> {% endif %}
         <a href="#" target="_blank">Voir le profile</a>
       </p>
-      <input
-        type="checkbox"
-        class="form-check-input translatorCheckbox"
-        id="trans_check{{ forloop.counter0 }}"
-        data="{{translator.user_profile.slug}}"
-        value="{{translator.user_profile.slug}}"
-      />
-      <label class="form-check-label" for="trans_check{{ forloop.counter0 }}"
-        >Choisissez ce traducteur</label
-      >
+      <input type="checkbox" class="form-check-input translatorCheckbox" id="trans_check{{ forloop.counter0 }}"
+        data="{{translator.user_profile.slug}}" value="{{translator.user_profile.slug}}" />
+      <label class="form-check-label" for="trans_check{{ forloop.counter0 }}">Choisissez ce traducteur</label>
     </div>
   </div>
   {% empty %}
@@ -31,13 +24,8 @@
   <div class="col-12"></div>
   <div class="col"></div>
   <input type="text" name="translators" type="hidden" style="display: none;" />
-  <input
-    type="submit"
-    value="Envoyer requetes"
-    id="submit_3"
-    class="btn btn-success col-10 font-weight-bold mx-2 text-center p-3"
-    style="visibility:hidden;"
-  />
+  <input type="submit" value="Envoyer requetes" id="submit_3"
+    class="btn btn-success col-10 font-weight-bold mx-2 text-center p-3" style="visibility:hidden;" />
   <div class="col"></div>
   {% endif %}
 </div>

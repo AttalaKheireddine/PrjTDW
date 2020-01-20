@@ -172,7 +172,10 @@ pre_save.connect(pre_save_profile_receiver, sender=UserProfile)
 
 
 def update_translator_rate(sender, instance, *args, **kwargs):
-    instance.translator.global_rate = instance.translator.rate_set.all().aggregate(models.Avg('rate'))
+    print("__________________________________________")
+    print (instance.translator.rate_set.all().aggregate(models.Avg('rate')))
+    print("__________________________________________")
+    instance.translator.global_rate = instance.translator.rate_set.all().aggregate(models.Avg('rate'))['rate__avg']
     instance.translator.save()
 
 
