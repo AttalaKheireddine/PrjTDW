@@ -74,6 +74,12 @@ def create_slug(instance, new_slug=None):
     return slug
 
 
+class Article(models.Model):
+    title = models.CharField(max_length=100)
+    text = models.TextField()
+    date = models.DateTimeField(default=timezone.now)
+
+
 class Language(models.Model):
     name = models.CharField(max_length=80, unique=True)
 

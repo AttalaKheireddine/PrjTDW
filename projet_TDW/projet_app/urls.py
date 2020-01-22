@@ -20,7 +20,7 @@ urlpatterns = [
     url(r'my-profile$',views.HomeView.as_view(),name="my profile"),
     url(r'profiles/(?P<slug>[\w\d-]+)$',views.UserProfileView.as_view(),name="profile"),
     url(r'translator-recruit$',views.RecruitTranslator.as_view(),name="recruit"),
-    url(r"a-propos$",views.HomeView.as_view(),name="a propos"),
+    url(r"a-propos$",views.About.as_view(),name="about"),
     url(r"translators$",views.HomeView.as_view(),name="translators"),
     url(r"translation-types$",views.HomeView.as_view(),name="types"),
     url(r"^$",views.HomeView.as_view(),name="home"),
@@ -28,5 +28,7 @@ urlpatterns = [
     url(r"^translator-transactions/(?P<pk>[\d]+)$",views.TranslationRequestDetails.as_view(),name="request_details"),
     url(r"^client-transactions$",views.AllClientTransactions.as_view(),name="client_transactions"),
     url(r"^client-transactions/(?P<pk>[\d]+)/accept$",views.ClientAccept.as_view(),name="client_accept"),
-    url(r"^client-transactions/(?P<pk>[\d]+)/refuse$",views.ClientRefuse.as_view(),name="client_refuse")
+    url(r"^client-transactions/(?P<pk>[\d]+)/refuse$",views.ClientRefuse.as_view(),name="client_refuse"),
+    url(r"blogs$",views.Blogs.as_view(),name="blogs"),
+    url(r"blog/(?P<pk>[\d]+)$",views.BlogDetail.as_view(),name="blog_detail")
 ]

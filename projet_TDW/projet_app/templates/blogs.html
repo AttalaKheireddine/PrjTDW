@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %} Blogs {% endblock %}
+{% block content %}
+{% load template_filters %}
+{% for article in articles %}
+<h3>{{article.title}}</h3>
+<p>
+    {{article.text|start}}...
+</p>
+<a href="{% url 'projet_app:blog_detail' pk=article.pk %}" class="btn btn-primary">Lire la suite</a>
+{% endfor %}
+{% endblock %}

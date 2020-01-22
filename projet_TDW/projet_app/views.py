@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .models import TranslationCategory, Language, TranslatorProfile, UserProfile, TranslationRequest
-from .models import ReferenceFile,TranslationOffer,TranslationResponse,Warn, Rate
+from .models import ReferenceFile,TranslationOffer,TranslationResponse,Warn, Rate, Article
 from .forms import AddUserForm, AddTranslatorForm,TranslationOfferForm,SendFileForm, ReportUserForm,RateForm
 from django.views.generic import View
 from django.db.models import Q
@@ -10,6 +10,7 @@ from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.utils import timezone
+import random
 # Create your views here.
 
 
@@ -20,8 +21,10 @@ EMPTY_USER_FORM = AddUserForm(auto_id=False)
 
 class HomeView(View):
     def get(self, request):
+        arts = sorted(Article.objects.all(), key=lambda x: random.random())
         return render(request, "home.html",
-                      {"categories": ALL_CATEGORIES, "languages": ALL_LANGUAGES, "form": EMPTY_USER_FORM})
+                      {"categories": ALL_CATEGORIES, "languages": ALL_LANGUAGES, "form": EMPTY_USER_FORM,
+                       "article1":arts[0],"article2":arts[1],"article3":arts[2]})
 
 
 class TranslatorsSelect(View):
@@ -365,15 +368,14 @@ class UserProfileView(View, LoginRequiredMixin):
             return render(request, "forbidden_request_detail.html")
         can_rate = False
         rate_form = None
-        if profile.translator_profile is not None:
-            qs = Q()
-            qs&= Q(offer__request__requester=request.user.profile)
-            qs &= Q(offer__request__translator=profile.translator_profile)
-            if TranslationResponse.objects.filter(qs).exists():
-                can_rate=True
-                print("zapdozzadoazoapeoapeoapeoaepoa")
-            print("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh")
-            rate_form = RateForm()
+        if profile != request.user.profile:
+            if profile.translator_profile is not None:
+                qs = Q()
+                qs&= Q(offer__request__requester=request.user.profile)
+                qs &= Q(offer__request__translator=profile.translator_profile)
+                if TranslationResponse.objects.filter(qs).exists():
+                    can_rate=True
+                    rate_form = RateForm()
         return render(request, "profile.html",{"profile":profile,'warn_form':warn_form,'can_rate':can_rate,"rate_form":rate_form})
 
 
@@ -421,5 +423,24 @@ class RateView(View,LoginRequiredMixin):
                                  'Merci pour votre opinion. Continuez à contribuer à Translate!')
             return redirect("projet_app:profile", slug=slug)
         else :
-            return render(request, "profile.html",
-                          {"profile": profile, 'warn_form': ReportUserForm(), "rate_form": form})
+            return render(request, "profile.html",{"can_rate":True,
+                          "profile": profile, 'warn_form': ReportUserForm(), "rate_form": form})
+
+class Blogs(View):
+    def get(self,request):
+        articles = Article.objects.all()
+        return render(request,"blogs.html",{"articles":articles})
+
+class BlogDetail(View):
+    def get(self,request,pk):
+        article = "roast"
+        try:
+            article = Article.objects.filter(pk=pk)[0]
+        except :
+            return render(request, "forbidden_request_detail.html")
+        return render(request,"blog_detail.html",{'article':article})
+
+class About(View):
+    def get(self,request):
+        return render(request,"a propos.html")
+

@@ -32,7 +32,8 @@
         {% endif %}
         {% if profile.translator_profile %}
         <h2>Informations du traducteur</h2>
-        <p>nombre de traductions: {{profile.translator_profile.number_of_translations}}</p>
+        <p>Nombre de traductions: {{profile.translator_profile.number_of_translations}}</p>
+        <p>Moyenne des notes: {{profile.translator_profile.global_rate}}</p>
         <p>Langues maîrisées : {% for language in profile.translator_profile.languages.all %} {{language }} {% endfor %}
         </p>
         <p>Catégories de traduction : {% for categ in profile.translator_profile.categories.all %} {{categ}}
@@ -47,8 +48,8 @@
         {% if can_rate %}
         <form action="{% url 'projet_app:rate' slug=profile.slug %}" method="POST">
             {% csrf_token %}
-            <p>Notez ce traducteur (remarque: Si vous avez déja noté {{profile.full_name}}, seule la dernière note
-                comptera</p>
+            <p>Notez ce traducteur (remarque: Si vous avez déja noté {{profile.full_name}}, votre note sera remplacée
+            </p>
             {{rate_form.rate}}
             <input type="submit" class="container-fluid btn btn-success my-2" value="Noter ce traducteur">
         </form>

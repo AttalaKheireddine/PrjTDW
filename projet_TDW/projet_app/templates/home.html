@@ -4,36 +4,31 @@
 {% if not user.is_authenticated %}
 <script src="{% static 'js/custom/non_auth.js' %}"></script>
 {% endif %}
+{% load template_filters %}
 <script></script>
 <section class="container-fluid row m-5">
   <section class="col-5" id="leftPart">
     <p>
 
-      <h3 class="font-weight-bold">Une application fiable et sûre</h3>
-      Translate vous offre la possibilité de jouir de traductions de hauts niveaux <a id="myBtn1_dots">...</a><span
-        id="myBtn1_more">faîtes par des gens de confiance! en effet, grâce à notre dispositif de gestion des
-        traducteurs,
-        vous pourrez avoir une idée précise sur l'expérience mais surtout l'expertise de la personne avec qui vous
-        Travaillez</span><a onclick="myFunction()" class="text-primary" id="myBtn1">
+      <h3 class="font-weight-bold">{{article3.title}}</h3>
+      {{article3.text|start}} <a id="myBtn1_dots">...</a><span id="myBtn1_more">{{article3.text|end}}</span><a
+        onclick="myFunction()" class="text-primary" id="myBtn1">
         Afficher plus
       </a>
     </p>
     <hr>
     <p>
-      <h3 class="font-weight-bold">Une application facile à utiliser</h3>
-      Translate offre toute ces fonctionnalités dans une interface Web intuitive <a id="myBtn2_dots">...</a><span
-        id="myBtn2_more">permettant a tout type de public d'obtenir des traductions sans aide particulière. Pour nous,
-        le satisfaction du client passe avant tout!</span><a onclick="myFunction()" class="text-primary" id="myBtn2">
+      <h3 class="font-weight-bold">{{ article2.title }}</h3>
+      {{article2.text|start}} <a id="myBtn2_dots">...</a><span id="myBtn2_more">{{article2.text|end}}</span><a
+        onclick="myFunction()" class="text-primary" id="myBtn2">
         Afficher plus
       </a>
     </p>
     <hr>
     <p>
-      <h3 class="font-weight-bold">Une solution moderne</h3>
-      Translate se veut être un moyen d'utiliser la technologie pour faciliter <a id="myBtn3_dots">...</a><span
-        id="myBtn3_more">la vie des individus en satisfaisant un de leurs besoins quotidiens. Ainsi, ce pas dans l'aire
-        du digital
-        est une de nos plus grandes fiertés</span><a class="text-primary" id="myBtn3">
+      <h3 class="font-weight-bold">{{ article1.title }}</h3>
+      {{article1.text|start}} <a id="myBtn3_dots">...</a><span id="myBtn3_more"> {{article1.text|end}} </span><a
+        class="text-primary" id="myBtn3">
         Afficher plus
       </a>
     </p>

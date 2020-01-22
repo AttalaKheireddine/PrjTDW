@@ -47,13 +47,13 @@
             <a class="" href="#">Traducteurs <span class="sr-only text-primary"></span></a>
           </li>
           <li class="nav-item col-lg text-center">
-            <a class="" href="#">Blogs <span class="sr-only text-primary"></span></a>
+            <a class="" href="{% url 'projet_app:blogs' %}">Blogs <span class="sr-only text-primary"></span></a>
           </li>
           <li class="nav-item col-lg text-center">
             <a class="" href="{% url 'projet_app:recruit'%}">Recrutement <span class="sr-only text-primary"></span></a>
           </li>
           <li class="nav-item col-lg text-center">
-            <a class="" href="#">A propos <span class="sr-only text-primary"></span></a>
+            <a class="" href="{% url 'projet_app:about' %}">A propos <span class="sr-only text-primary"></span></a>
           </li>
         </ul>
       </div>
@@ -100,17 +100,16 @@
         <a class="text-white font-weight-bold" href="#">Traducteurs</a>
       </li>
       <li class="col-lg text-center ">
-        <a class="text-white font-weight-bold" href="#">Blogs</a>
+        <a class="text-white font-weight-bold" href="{% url 'projet_app:blogs' %}">Blogs</a>
       </li>
       <li class="col-lg text-center ">
         <a class="text-white font-weight-bold" href="{% url 'projet_app:recruit' %}">Recrutement</a>
       </li>
       <li class="col-lg text-center text-white font-weight-bold">
-        <a class="text-white font-weight-bold" href="#">A propos</a>
+        <a class="text-white font-weight-bold" href="{% url 'projet_app:about' %}">A propos</a>
       </li>
     </ul>
   </footer>
-
 </body>
 
 </html>
