@@ -10,3 +10,10 @@ vous pouvez accéder à la base de données en lançant le site puis en allant sur l
 (Vous vous authentifierez avec username = "admin", password="admin")
 
 Vous remarquerez qu'il y a dans les tables de la BDD ceraints objets, ceux-ci sont ceux utilisés pour tester (Bien sûr les utilisateurs que vous avez mentionné dans l'énoncé y sont)
+
+
+Aussi
+
+Si vous désirez vous authentifier en tant que l'un des utilisateurs qué vous avez donné, son email est "g[première lettre du prénom]_[nom de famille]@gmail.com" 
+par exemple : Hazi Farouk à le mail gf_hazi@gmail.com 
+Le mot de passe de ces utilisateurs est "azeazeaze"
