@@ -1,4 +1,7 @@
 $("document").ready(function () {
+
+  $('[data-toggle="popover"]').popover();
+  //
   $("#myBtn1").click(function () {
     more_less("myBtn1");
   });

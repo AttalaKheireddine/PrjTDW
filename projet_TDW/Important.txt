@@ -1,0 +1,12 @@
+La technologie utilisée est Django version 2.1.1
+
+vous devrez installer python puis django (commande pour installer django 
+"pip install django==2.1.1")
+
+Pour lancer le site sur localhost il suffit d'entrer dans le dossier du projet, ouvrir un terminal et taper "python manage.py runserver"
+
+La BDD utilisée est Sqlite, cela ne vous posera pas de problèmes durant l'évaluation car
+vous pouvez accéder à la base de données en lançant le site puis en allant sur localhost/admin
+(Vous vous authentifierez avec username = "admin", password="admin")
+
+Vous remarquerez qu'il y a dans les tables de la BDD ceraints objets, ceux-ci sont ceux utilisés pour tester (Bien sûr les utilisateurs que vous avez mentionné dans l'énoncé y sont)

@@ -36,7 +36,7 @@
         <p>Moyenne des notes: {{profile.translator_profile.global_rate}}</p>
         <p>Langues maîrisées : {% for language in profile.translator_profile.languages.all %} {{language }} {% endfor %}
         </p>
-        <p>Catégories de traduction : {% for categ in profile.translator_profile.categories.all %} {{categ}}
+        <p>Catégories de traduction : {% for categ in profile.translator_profile.categories.all %} {{categ}} -
             {% endfor %}
         </p>
         <a href="{{profile.translator_profile.cv.url}}" class="btn btn-primary" download>Télécharger le CV</a>

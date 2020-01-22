@@ -60,6 +60,34 @@
   opacity: 0.7;
 }
 
+/* oda icons */
+.fa-user {
+  color: black;
+}
+
+.fa-user:hover {
+  color: black;
+  opacity: 0.7;
+}
+
+
+.fa-dashboard {
+  color: black;
+}
+
+.fa-dashboard:hover {
+  color: black;
+  opacity: 0.7;
+}
+
+.fa-pencil-square {
+  color: black;
+}
+
+.fa-pencil-square:hover {
+  color: black;
+  opacity: 0.7;
+}
 #myBtn1_more,
 #myBtn2_more,
 #myBtn3_more {

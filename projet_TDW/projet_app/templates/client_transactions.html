@@ -9,10 +9,15 @@
 {% endfor %}
 {% endif %}
 <div class="row">
+    <hr>
+    <div class="row text-center container-fluid">
+        <h1 class="col container-fluid">Dashboard</h1>
+    </div>
     <div class="col-2"></div>
     <div class="col-4">
+
         <h3 class=" text-center my-3">
-            Vos offres de traduction
+            Vos devis de traduction
         </h3>
 
 
@@ -21,7 +26,9 @@
         <div class="card m2">
             <h5 class="card-header text-center">Offre de : {{ offer.request.translator.user_profile.full_name }}</h5>
             <div class="card-body">
-                <h5 class="card-title text-center"><a href="#" class="text-center">Voir le profil</a></h5>
+                <h5 class="card-title text-center"><a
+                        href="{% url 'projet_app:profile' slug=offer.request.translator.user_profile.slug %}"
+                        class="text-center">Voir le profil</a></h5>
                 <div class="row align-content-center">
                     <p class="col align-self-center text-center">
                         Prix en avance : {{offer.accept_price}}DA
@@ -49,7 +56,7 @@
         </div>
         {% empty %}
         <p class="text-center">
-            Vous n'avez aucune offre de traduction en attente
+            Vous n'avez aucun devis de traduction en attente
         </p>
         {% endfor %}
     </div>
@@ -83,7 +90,7 @@
         </div>
         {% empty %}
         <p class="text-center">
-            Vous n'avez aucune offre de traduction en attente
+            Vous n'avez aucune réponse pour l'instant
         </p>
         {% endfor %}
     </div>

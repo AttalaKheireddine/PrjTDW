@@ -9,7 +9,7 @@
       <p class="card-text">
         {% if translator.global_rate %} Note globale :
         {{translator.global_rate}} <br> {% endif %}
-        <a href="#" target="_blank">Voir le profile</a>
+        <a href="{% url 'projet_app:profile' slug=translator.user_profile.slug %}" target="_blank">Voir le profile</a>
       </p>
       <input type="checkbox" class="form-check-input translatorCheckbox" id="trans_check{{ forloop.counter0 }}"
         data="{{translator.user_profile.slug}}" value="{{translator.user_profile.slug}}" />
