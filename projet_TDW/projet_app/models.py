@@ -131,6 +131,13 @@ class Warn (models.Model):
     warn_date = models.DateTimeField(default=timezone.now)
 
 class TranslationRequest (models.Model):
+
+    class Meta:
+        verbose_name_plural = "Devis de traduction"
+
+    def __str__(self):
+        return "devis de : "+self.full_name+" vers: "+self.translator.user_profile.full_name
+
     requester = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     full_name = models.CharField(max_length=60, blank=False, null=False)
     address = models.CharField(max_length=100, blank=True, null=False)
@@ -162,10 +169,17 @@ class TranslationOffer (models.Model):
 
 
 class TranslationResponse(models.Model):
+
+    class Meta:
+        verbose_name_plural = "Traductions"
+
     offer = models.ForeignKey(TranslationOffer, on_delete=models.CASCADE)
     file = models.FileField(upload_to=response_file_naming)
     done = models.BooleanField(default=False)
     response_date = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return "Traduction de : "+self.offer.request.full_name+" vers: "+self.offer.request.translator.user_profile.full_name
 
 
 def pre_save_profile_receiver(sender, instance, *args, **kwargs):
@@ -178,9 +192,7 @@ pre_save.connect(pre_save_profile_receiver, sender=UserProfile)
 
 
 def update_translator_rate(sender, instance, *args, **kwargs):
-    print("__________________________________________")
     print (instance.translator.rate_set.all().aggregate(models.Avg('rate')))
-    print("__________________________________________")
     instance.translator.global_rate = instance.translator.rate_set.all().aggregate(models.Avg('rate'))['rate__avg']
     instance.translator.save()
 
