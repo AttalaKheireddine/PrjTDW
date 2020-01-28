@@ -1,0 +1,13 @@
+{% extends "admin/index.html" %}
+
+{% block sidebar %}
+{{block.super}}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.js"></script>
+<div>
+    {{form.as_p}}
+    <input type="submit" value="Voir les statistiques">
+</div>
+<canvas id="chart">
+
+</canvas>
+{% endblock %}

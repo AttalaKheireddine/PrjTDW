@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.validators import ASCIIUsernameValidator
-from .models import TranslationCategory, Language
+from .models import TranslationCategory, Language,TranslatorProfile,UserProfile
 from django.core.validators import RegexValidator
 
 #We define some custom validators here
@@ -11,6 +11,12 @@ file_name_pdf_validator = RegexValidator(regex=r".*pdf",message="Votre fichier d
 LANGUAGE_NAMES = tuple([(i.pk,i.name) for i in Language.objects.all()])
 CATEGORY_NAMES = tuple([(i.pk,i.name) for  i in TranslationCategory.objects.all()])
 RATES = [(str(i),str(i)) for i in range(1,11)]
+
+CLIENTS = [(i.pk,i.full_name) for i in UserProfile.objects.all()]
+CLIENTS.append(("","TOUS"))
+
+TRANSLATORS = [(i.pk,i.user_profile.full_name) for i in TranslatorProfile.objects.all()]
+TRANSLATORS.append(("","TOUS"))
 
 
 class AddUserForm(forms.Form):
@@ -73,4 +79,9 @@ class ReportUserForm(forms.Form):
 class RateForm(forms.Form):
     rate = forms.TypedChoiceField(choices=RATES,coerce=int)
 
+class ChartForm(forms.Form):
+    date_inf =forms.DateField()
+    date_sup = forms.DateField()
+    client = forms.ChoiceField(choices=CLIENTS)
+    translators = forms.ChoiceField(choices=TRANSLATORS,label="Traducteur")
 

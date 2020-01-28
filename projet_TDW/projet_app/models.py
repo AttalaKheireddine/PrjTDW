@@ -99,7 +99,7 @@ class TranslationCategory(models.Model):
 
 
 class TranslatorProfile (models.Model):
-    number_of_translations = models.IntegerField(default=0)
+    number_of_translations = models.IntegerField(default=0,verbose_name="Nombre de Traductions")
     languages = models.ManyToManyField(Language, related_name="translator")
     categories = models.ManyToManyField(TranslationCategory, related_name="translator")
     cv = models.FileField(upload_to=cv_file_naming)
