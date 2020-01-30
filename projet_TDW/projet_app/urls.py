@@ -30,5 +30,6 @@ urlpatterns = [
     url(r"^client-transactions/(?P<pk>[\d]+)/accept$",views.ClientAccept.as_view(),name="client_accept"),
     url(r"^client-transactions/(?P<pk>[\d]+)/refuse$",views.ClientRefuse.as_view(),name="client_refuse"),
     url(r"blogs$",views.Blogs.as_view(),name="blogs"),
-    url(r"blog/(?P<pk>[\d]+)$",views.BlogDetail.as_view(),name="blog_detail")
+    url(r"blog/(?P<pk>[\d]+)$",views.BlogDetail.as_view(),name="blog_detail"),
+    url(r"^chart/",views.Chart.as_view(),name="chart"),
 ]

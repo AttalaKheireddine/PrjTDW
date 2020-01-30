@@ -12,6 +12,7 @@ class MyAdminSite(admin.AdminSite):
     index_template = "ADMIN.html"
     site_header = "Translate Admin"
     site_title = "Translate"
+
     def each_context(self, request):
         return {"form":ChartForm()}
 
@@ -28,18 +29,13 @@ class ProfileAdmin(admin.ModelAdmin):
     inlines = [RequestsInline]
 
 class TranslatorAdmin(admin.ModelAdmin):
-    #search_fields = ["user_profile__full_name", "user_profile__wilaya"]
-    #list_display = ["user_profile__full_name", "user_profile__wilaya", "user_profile__commune", "user_profile__phone_number"]
-    #sortable_by = ["user_profile__full_name", "user_profile__wilaya", "user_profile__commune","number_of_translations"]
-    inlines = [RequestsInline]
+   inlines = [RequestsInline]
 
 class RequestAdmin(admin.ModelAdmin):
     pass
 
 class ResponseAdmin(admin.ModelAdmin):
     pass
-
-
 
 admin_site = MyAdminSite(name='myadmin')
 admin_site.register(UserProfile,ProfileAdmin)

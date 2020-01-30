@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from .models import TranslationCategory, Language, TranslatorProfile, UserProfile, TranslationRequest
 from .models import ReferenceFile,TranslationOffer,TranslationResponse,Warn, Rate, Article
-from .forms import AddUserForm, AddTranslatorForm,TranslationOfferForm,SendFileForm, ReportUserForm,RateForm
+from .forms import AddUserForm, AddTranslatorForm,TranslationOfferForm,SendFileForm, ReportUserForm,RateForm,ChartForm
 from django.views.generic import View
 from django.db.models import Q
 from django.db import IntegrityError
@@ -11,6 +11,7 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 from django.utils import timezone
 import random
+from django.http import JsonResponse
 # Create your views here.
 
 
@@ -54,7 +55,10 @@ class Login(View):
         password = request.POST['password']
         user = authenticate(request, username=username, password=password)
         if user is not None:
-            login(request, user)
+           # if not user.profile.is_blocked:
+             #   login(request, user)
+            #else:
+                messages.add_message(request, messages.ERROR, 'Votre compte Translate à été blocké')
         else:
             messages.add_message(request, messages.ERROR, 'Combinaison email/mot de passe invalide')
         return redirect("projet_app:home")
@@ -444,3 +448,32 @@ class About(View):
     def get(self,request):
         return render(request,"a propos.html")
 
+class Chart(View):
+    def get(self,request):
+        data = ChartForm(request.GET)
+        data.is_valid()
+        date_inf = data.cleaned_data["date_inf"]
+        date_sup = data.cleaned_data["date_sup"]
+        translator = data.cleaned_data["translator"]
+        client = data.cleaned_data["client"]
+
+        qs_request = Q()
+        qs_response = Q()
+        qs_request &=Q(request_date__gt=date_inf)
+        qs_request &= Q(request_date__lt=date_sup)
+
+        qs_response &= Q(response_date__gt=date_inf)
+        qs_response &= Q(response_date__lt=date_sup)
+
+        if client !="all":
+            qs_request &=Q(requester__pk=client)
+            qs_response &= Q(offer__request__requester__pk=client)
+
+        if translator!="all":
+            qs_request &=Q(translator__pk=translator)
+            qs_response &= Q(offer__request__translator__pk=translator)
+
+        rq_count = TranslationRequest.objects.filter(qs_request).count()
+        res_count = TranslationResponse.objects.filter(qs_response).count()
+
+        return JsonResponse({"requests":rq_count,"responses":res_count})

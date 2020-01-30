@@ -60,6 +60,7 @@ class UserProfile(models.Model):
     profile_picture = models.ImageField(upload_to=profile_pic_naming, blank=True)
     wilaya = models.CharField(max_length=30)
     commune = models.CharField(max_length=50)
+    is_blocked = models.BooleanField(default=False,verbose_name="est bloqué")
 
     def __str__(self):
         return self.slug

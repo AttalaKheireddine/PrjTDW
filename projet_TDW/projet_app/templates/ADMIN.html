@@ -2,12 +2,19 @@
 
 {% block sidebar %}
 {{block.super}}
+{% load static %}
+<script src="{% static 'js/jquery.js' %}" type="text/javascript"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.js"></script>
+<script src="{% static 'js/custom/admin.js' %}"></script>
+<br>
 <div>
-    {{form.as_p}}
-    <input type="submit" value="Voir les statistiques">
-</div>
-<canvas id="chart">
+    <form action="" method="GET" id="charting">
+        {{form.as_p}}
+        <input type="submit" value="Voir les statistiques">
+    </form>
 
+</div>
+<canvas id="chart" width="400" height="400">
+    ZAPD
 </canvas>
 {% endblock %}

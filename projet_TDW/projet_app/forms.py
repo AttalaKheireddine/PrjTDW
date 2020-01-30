@@ -13,11 +13,10 @@ CATEGORY_NAMES = tuple([(i.pk,i.name) for  i in TranslationCategory.objects.all(
 RATES = [(str(i),str(i)) for i in range(1,11)]
 
 CLIENTS = [(i.pk,i.full_name) for i in UserProfile.objects.all()]
-CLIENTS.append(("","TOUS"))
+CLIENTS.append(("all","TOUS"))
 
 TRANSLATORS = [(i.pk,i.user_profile.full_name) for i in TranslatorProfile.objects.all()]
-TRANSLATORS.append(("","TOUS"))
-
+TRANSLATORS.append(("all","TOUS"))
 
 class AddUserForm(forms.Form):
     family_name = forms.CharField(label='',max_length=30,widget=forms.TextInput(  attrs= {'placeholder': 'Prenom','class': 'col-5 m-2 form-control'}))
@@ -80,8 +79,8 @@ class RateForm(forms.Form):
     rate = forms.TypedChoiceField(choices=RATES,coerce=int)
 
 class ChartForm(forms.Form):
-    date_inf =forms.DateField()
-    date_sup = forms.DateField()
-    client = forms.ChoiceField(choices=CLIENTS)
-    translators = forms.ChoiceField(choices=TRANSLATORS,label="Traducteur")
+    date_inf =forms.DateField(widget=forms.SelectDateWidget(attrs={id:"date_inf"}))
+    date_sup = forms.DateField(widget=forms.SelectDateWidget(attrs={id:"date_sup"}))
+    client = forms.ChoiceField(choices=CLIENTS,widget=forms.Select(attrs={id:"client"}))
+    translator = forms.ChoiceField(choices=TRANSLATORS,label="Traducteur",widget=forms.Select(attrs={id:"translator"}))
 
