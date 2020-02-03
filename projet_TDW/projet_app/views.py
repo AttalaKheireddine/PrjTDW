@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .models import TranslationCategory, Language, TranslatorProfile, UserProfile, TranslationRequest
-from .models import ReferenceFile,TranslationOffer,TranslationResponse,Warn, Rate, Article
+from .models import ReferenceFile,TranslationOffer,TranslationResponse,Warn, Rate, Article, Notification
 from .forms import AddUserForm, AddTranslatorForm,TranslationOfferForm,SendFileForm, ReportUserForm,RateForm,ChartForm
 from django.views.generic import View
 from django.db.models import Q
@@ -252,6 +252,7 @@ class AllTranslatorTransactions(View,LoginRequiredMixin):
             translator = offer.request.translator
             translator.number_of_translations+=1
             translator.save()
+
             messages.add_message(request, messages.SUCCESS, 'Opération réussie')
             return redirect("projet_app:translator_transactions")
 

@@ -199,3 +199,11 @@ def update_translator_rate(sender, instance, *args, **kwargs):
 
 
 post_save.connect(update_translator_rate, sender=Rate)
+
+
+class Notification(models.Model):
+    user = models.ForeignKey(UserProfile,on_delete=models.CASCADE)
+    text = models.CharField(max_length=200)
+    date = models.DateTimeField(default=timezone.now)
+    read = models.BooleanField(default=False)
+
