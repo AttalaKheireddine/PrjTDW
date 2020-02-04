@@ -5,11 +5,24 @@
 <script src="{% static 'js/custom/non_auth.js' %}"></script>
 {% endif %}
 {% load template_filters %}
-<script></script>
+
+
 <section class="container-fluid row m-5">
   <section class="col-5" id="leftPart">
+    <div>
+      {% for notif in notifications %}
+      <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        {{notif.text}}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      {% endfor %}
+    </div>
+    {% if notifications %}
+    <hr>
+    {% endif %}
     <p>
-
       <h3 class="font-weight-bold">{{article3.title}}</h3>
       {{article3.text|start}} <a id="myBtn1_dots">...</a><span id="myBtn1_more">{{article3.text|end}}</span><a
         onclick="myFunction()" class="text-primary" id="myBtn1">

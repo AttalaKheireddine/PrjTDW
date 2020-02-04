@@ -23,9 +23,19 @@ EMPTY_USER_FORM = AddUserForm(auto_id=False)
 class HomeView(View):
     def get(self, request):
         arts = sorted(Article.objects.all(), key=lambda x: random.random())
+        notifs = None
+        if request.user.is_authenticated:
+            notifs = Notification.objects.filter( Q(user=request.user.profile)&Q(read=False)).order_by("-date")
+            for notif in notifs :
+                notif.read = True
+                notif.save()
+        try:
+            print(notifs[0].text)
+        except:
+            pass
         return render(request, "home.html",
                       {"categories": ALL_CATEGORIES, "languages": ALL_LANGUAGES, "form": EMPTY_USER_FORM,
-                       "article1":arts[0],"article2":arts[1],"article3":arts[2]})
+                       "article1":arts[0],"article2":arts[1],"article3":arts[2],"notifications":notifs})
 
 
 class TranslatorsSelect(View):
@@ -55,9 +65,9 @@ class Login(View):
         password = request.POST['password']
         user = authenticate(request, username=username, password=password)
         if user is not None:
-           # if not user.profile.is_blocked:
-             #   login(request, user)
-            #else:
+            if not user.profile.is_blocked:
+                login(request, user)
+            else:
                 messages.add_message(request, messages.ERROR, 'Votre compte Translate à été blocké')
         else:
             messages.add_message(request, messages.ERROR, 'Combinaison email/mot de passe invalide')
@@ -147,6 +157,8 @@ class SendRequest(View):
                 trans_req.requester = request.user.profile
                 trans_req.save()
 
+                makeNewNotif(trans_req.translator.user_profile,"Vous avez reçu une demande de devis de {}".format(str(trans_req.requester)))
+
         except Exception:
             messages.add_message(request, messages.ERROR, "Il semblerait qu'une erreur se soit produite")
         else:
@@ -183,7 +195,6 @@ class RecruitTranslator(View):
             profile.wilaya = new_form.cleaned_data["wilaya"]
             profile.commune = new_form.cleaned_data["commune"]
             profile.save()
-
             translator_profile = TranslatorProfile()
             translator_profile.user_profile = profile
             translator_profile.save()
@@ -249,6 +260,7 @@ class AllTranslatorTransactions(View,LoginRequiredMixin):
             response.offer = offer
             response.file = file
             response.save()
+            makeNewNotif(response.offer.request.requester,"Vous venez de recevoir une réponse à votre offre de traduction!")
             translator = offer.request.translator
             translator.number_of_translations+=1
             translator.save()
@@ -303,6 +315,7 @@ class TranslationRequestDetails(View,LoginRequiredMixin):
             offer.accept_price = offer_form.cleaned_data["accept_price"] if offer_form.cleaned_data["accept_price"] else 0
             offer.notes = offer_form.cleaned_data["notes"]
             offer.save()
+            makeNewNotif(offer.request.translator.user_profile,"Vous avez une demande de traduction de {}".format(str(offer.request.requester)))
             messages.add_message(request, messages.SUCCESS, 'Opération réussie!')
             return redirect("projet_app:translator_transactions")
         else:
@@ -334,6 +347,7 @@ class ClientAccept(View,LoginRequiredMixin):
         messages.add_message(request, messages.SUCCESS, 'Opération réussie!')
         offer.accept_offer_date = timezone.now()
         offer.save()
+        makeNewNotif(offer.request.requester, "Vous avez une offre de traduction acceptée")
         return redirect("projet_app:client_transactions")
 
 class ClientRefuse(View,LoginRequiredMixin):
@@ -478,3 +492,9 @@ class Chart(View):
         res_count = TranslationResponse.objects.filter(qs_response).count()
 
         return JsonResponse({"requests":rq_count,"responses":res_count})
+
+def makeNewNotif(profile, text):
+    new_notif = Notification()
+    new_notif.user = profile
+    new_notif.text = text
+    new_notif.save()
