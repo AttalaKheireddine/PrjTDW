@@ -16,18 +16,7 @@ class MyAdminSite(admin.AdminSite):
     site_title = "Translate"
     # login_form = AuthenticationForm
     # login_template = super(*args,**kwargs).login_template
-    """
-    def each_context(self, request):
-        context = dict(
-            # Include common variables for rendering the admin template.
-            # super().each_context(request),
 
-            super(MyAdminSite, self).each_context(request),
-            # Anything else you want in the context...
-            form=ChartForm()
-        )
-        return context
-    """
 
     def index(self, request, extra_context={"form":ChartForm()}):
         return super(MyAdminSite, self).index(request, extra_context)

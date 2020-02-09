@@ -106,17 +106,17 @@ class Register(View):
 
 class SendRequest(View):
     def post(self, request):
-        family_name = request.POST.get("family_name","")
-        first_name = request.POST.get("first_name","")
-        email = request.POST.get("email","")
+        family_name = request.POST.get("family_name", "")
+        first_name = request.POST.get("first_name", "")
+        email = request.POST.get("email", "")
         phone = request.POST.get("phone","")
-        address = request.POST.get("address","")
-        translators = request.POST.get("translators",'')
-        src_lang = request.POST.get("src_lang",'')
-        dest_lang = request.POST.get("dest_lang",'')
-        category = request.POST.get("category",'')
-        notes = request.POST.get("notes",'')
-        file = request.FILES.get('file_req','')
+        address = request.POST.get("address", "")
+        translators = request.POST.get("translators", '')
+        src_lang = request.POST.get("src_lang", '')
+        dest_lang = request.POST.get("dest_lang", '')
+        category = request.POST.get("category", '')
+        notes = request.POST.get("notes", '')
+        file = request.FILES.get('file_req', '')
 
         for i in [family_name, first_name, email, phone, address]:
             if not i:
